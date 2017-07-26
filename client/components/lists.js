@@ -17,7 +17,7 @@ const Lists = ({lists}) => {
   // })
 
   return (
-    <ul className="no-bullet">
+    <ul className="spaced no-bullet">
       {RenderedLists}
     </ul>
   );

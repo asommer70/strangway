@@ -54,10 +54,6 @@ $foundation-palette: (
 @include foundation-visibility-classes;
 @include foundation-float-classes;
 
-body {
-  // background-color: #eeeeee;
-}
-
-.container {
-  // background: white;
+.spaced li {
+  margin-bottom: .7em;
 }
