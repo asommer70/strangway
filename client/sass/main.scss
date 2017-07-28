@@ -96,8 +96,32 @@ $foundation-palette: (
 
 .notes-list {
   margin-top: 20px;
-  
+
   li {
     margin-bottom: 20px;
   }
+}
+
+.deets {
+  width: 200px;
+  display: inline-block;
+}
+
+footer.share {
+  bottom: 0;
+  width: 100%;
+}
+
+ul.inline li {
+  display: inline;
+  margin-right: 10px;
+  // padding: 1px;
+}
+
+.input-group.shared {
+  margin-top: 5px;
+}
+
+.subheader.sharedwith {
+  margin-top: 0;
 }

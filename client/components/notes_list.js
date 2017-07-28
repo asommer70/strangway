@@ -36,5 +36,6 @@ class NotesList extends Component {
 
 export default createContainer(() => {
   Meteor.subscribe('notes');
+  Meteor.subscribe('sharedNotes');
   return { notes: Notes.find({}).fetch() };
 }, NotesList);

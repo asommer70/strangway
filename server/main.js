@@ -18,4 +18,14 @@ Meteor.startup(() => {
   Meteor.publish('notes', function() {
     return Notes.find({}, {ownerId: this.userId, limit: 20});
   });
+
+  Meteor.publish('sharedNotes', function() {
+    const user = Meteor.users.findOne(this.userId);
+
+    if (!user) { return; }
+
+    return Notes.find({
+      sharedWith: { $elemMatch: { $eq: user.emails[0].address }}
+    });
+  });
 });

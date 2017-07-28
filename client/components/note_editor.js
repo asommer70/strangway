@@ -3,13 +3,18 @@ import CodeMirror from 'react-codemirror';
 import 'codemirror/mode/markdown/markdown';
 
 class NoteEditor extends Component {
+  onEditorChange(content) {
+    Meteor.call('notes.update', this.props.note, {content});
+  }
+
   render() {
+    if (!this.props.note) { return <div>Loading...</div> };
+
     return (
-      <div className="row">
-        <div className="large-6 columns">
-          <CodeMirror options={{mode: 'markdown', lineNumbers: true}} />
-        </div>
-      </div>
+      <CodeMirror
+        value={this.props.note.content}
+        onChange={this.onEditorChange.bind(this)}
+        options={{mode: 'markdown', lineNumbers: true}} />
     );
   }
 }
