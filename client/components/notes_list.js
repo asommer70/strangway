@@ -3,10 +3,32 @@ import { createContainer } from 'meteor/react-meteor-data';
 import { Notes } from '../../imports/collections/notes';
 
 class NotesList extends Component {
+  constructor(props) {
+    super(props);
+  }
+
+  onNoteRemove(note) {
+    Meteor.call('notes.remove', note);
+  }
+
   render() {
-    console.log('this.props.notes:', this.props.notes);
+    const RenderedNotes = this.props.notes.map((note) => {
+      return (
+        <li key={note._id}>
+          {note._id}
+          <span className="float-right">
+            <button type="button" className="button alert tiny" onClick={() => this.onNoteRemove(note)}>Remove</button>
+          </span>
+        </li>
+      );
+    });
+
     return (
-      <div>Notes...</div>
+      <div>
+        <ul className="notes-list no-bullet">
+          {RenderedNotes}
+        </ul>
+      </div>
     )
   }
 }

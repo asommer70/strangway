@@ -9,6 +9,10 @@ Meteor.methods({
       ownerId: this.userId,
       createdAt: new Date()
     });
+  },
+
+  'notes.remove': function(note) {
+    return Notes.remove(note);
   }
 });
 

@@ -17,6 +17,8 @@ const Lists = ({lists}) => {
 
       <br/><hr/><br/>
       <a href="#" onClick={(e) => {e.preventDefault(); Meteor.call('notes.insert');}} >Create Note</a>
+      <br/>
+      
       <NotesList />
     </div>
   );
