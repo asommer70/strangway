@@ -1,12 +1,25 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
+import { Switch, Router, Route, IndexRoute } from 'react-router';
+import createBrowserHistory from 'history/createBrowserHistory';
+// import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
+
+import Home from './components/home';
 import Header from './components/header';
-import Lists from './components/lists';
+// import Lists from './components/lists';
+// import ListForm from './components/list_form';
+import Note from './components/note';
+
 import TodoLists from '../imports/collections/todo_lists';
 import Notes from '../imports/collections/notes';
-import ListForm from './components/list_form';
+
+const history = createBrowserHistory();
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+  }
+
   componentDidMount() {
     $(document).foundation();
   }
@@ -16,21 +29,21 @@ class App extends Component {
       <div>
         <Header />
 
-        <div className="row">
-          <div className="large-10 column">
-            <br/>
-            <Lists />
-          </div>
-
-          <div className="large-2 column">
-            <ListForm />
-          </div>
-        </div>
+        {this.props.children}
       </div>
     );
   }
 }
 
+const routes = (
+  <Router history={history}>
+    <App>
+      <Route exact path="/" component={Home} />
+      <Route path="/notes/:id" component={Note} />
+    </App>
+  </Router>
+)
+
 Meteor.startup(() => {
-  ReactDOM.render(<App />, document.getElementById('app'));
+  ReactDOM.render(routes, document.getElementById('app'));
 });

@@ -15,7 +15,7 @@ class NotesList extends Component {
     const RenderedNotes = this.props.notes.map((note) => {
       return (
         <li key={note._id}>
-          {note._id}
+          <a href={'/notes/' + note._id}>{note._id}</a>
           <span className="float-right">
             <button type="button" className="button alert tiny" onClick={() => this.onNoteRemove(note)}>Remove</button>
           </span>
