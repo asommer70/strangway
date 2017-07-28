@@ -3,13 +3,13 @@ import Header from './header';
 import Lists from './lists';
 import ListForm from './list_form';
 
-export default () => {
+export default (props) => {
   return (
     <div>
       <div className="row">
         <div className="large-10 column">
           <br/>
-          <Lists />
+          <Lists history={props.history} />
         </div>
 
         <div className="large-2 column">

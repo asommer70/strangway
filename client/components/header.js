@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import Accounts from './accounts';
 
 class Header extends Component {
@@ -9,9 +10,9 @@ class Header extends Component {
           <ul className="menu">
             <li className="menu-text">Strangway</li>
             <li className="is-active"><a href="/">Lists</a></li>
-            <li><a href="/notes">Notes</a></li>
-            <li><a href="/journal">Journal</a></li>
-            <li><a href="/contacts">Contacts</a></li>
+            <li><Link to="/notes">Notes</Link></li>
+            <li><Link to="/journal">Journal</Link></li>
+            <li><Link to="/contacts">Contacts</Link></li>
           </ul>
         </div>
         <div className="top-bar-right">

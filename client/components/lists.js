@@ -1,12 +1,15 @@
 import React from 'react';
 import { TodoLists } from '../../imports/collections/todo_lists';
 import { createContainer } from 'meteor/react-meteor-data';
+import { Link, browserHistory } from 'react-router-dom';
 import List from './list';
 import NotesList from './notes_list';
 
-const Lists = ({lists}) => {
-  const RenderedLists = lists.map((list) => {
-    return <List key={list._id} list={list} />
+const Lists = (props) => {
+  const RenderedLists = props.lists.map((list) => {
+    return (
+      <li key={list._id}><Link to={'/lists/' + list._id}>{list.name}</Link></li>
+    )
   });
 
   return (
@@ -16,9 +19,9 @@ const Lists = ({lists}) => {
       </ul>
 
       <br/><hr/><br/>
-      <a href="#" onClick={(e) => {e.preventDefault(); Meteor.call('notes.insert');}} >Create Note</a>
+      <a href="#" onClick={(e) => {e.preventDefault(); Meteor.call('notes.insert', (err, noteId) => { props.history.push(`/notes/${noteId}`); }); }} >Create Note</a>
       <br/>
-      
+
       <NotesList />
     </div>
   );

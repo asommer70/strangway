@@ -6,8 +6,7 @@ import createBrowserHistory from 'history/createBrowserHistory';
 
 import Home from './components/home';
 import Header from './components/header';
-// import Lists from './components/lists';
-// import ListForm from './components/list_form';
+import List from './components/list';
 import Note from './components/note';
 
 import TodoLists from '../imports/collections/todo_lists';
@@ -39,6 +38,7 @@ const routes = (
   <Router history={history}>
     <App>
       <Route exact path="/" component={Home} />
+      <Route path="/lists/:id" component={List} />
       <Route path="/notes/:id" component={Note} />
     </App>
   </Router>
