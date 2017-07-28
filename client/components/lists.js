@@ -2,6 +2,7 @@ import React from 'react';
 import { TodoLists } from '../../imports/collections/todo_lists';
 import { createContainer } from 'meteor/react-meteor-data';
 import List from './list';
+import NotesList from './notes_list';
 
 const Lists = ({lists}) => {
   const RenderedLists = lists.map((list) => {
@@ -9,9 +10,15 @@ const Lists = ({lists}) => {
   });
 
   return (
-    <ul className="spaced no-bullet">
-      {RenderedLists}
-    </ul>
+    <div>
+      <ul className="spaced no-bullet">
+        {RenderedLists}
+      </ul>
+
+      <br/><hr/><br/>
+      <a href="#" onClick={(e) => {e.preventDefault(); Meteor.call('notes.insert');}} >Create Note</a>
+      <NotesList />
+    </div>
   );
 }
 

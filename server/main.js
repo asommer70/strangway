@@ -12,6 +12,10 @@ Meteor.startup(() => {
   }
 
   Meteor.publish('lists', function() {
-    return TodoLists.find({}, {limit: 20});
+    return TodoLists.find({}, {ownerId: this.userId, limit: 20});
+  });
+
+  Meteor.publish('notes', function() {
+    return Notes.find({}, {ownerId: this.userId, limit: 20});
   });
 });
