@@ -30,7 +30,6 @@ class ListForm extends Component {
   render() {
     return (
       <div>
-        <br/>
         <form onSubmit={this.handleSubmit.bind(this)}>
           <fieldset className="fieldset">
             <legend>New ToDo List</legend>

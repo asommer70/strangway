@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Accounts from './accounts';
 
 class Header extends Component {
   render() {
@@ -17,8 +18,12 @@ class Header extends Component {
           <ul className="menu">
             <li><input type="search" placeholder="Search" /></li>
             <li><button type="button" className="button">Search</button></li>
-            <li><a href="/signup">Sign up</a></li>
-            <li><a href="/signin">Sign in</a></li>
+            <li>
+              <a href="#" data-toggle="auth-form">Sign In</a>
+              <div className="dropdown-pane" id="auth-form" data-dropdown data-auto-focus="true">
+                <Accounts />
+              </div>
+            </li>
           </ul>
         </div>
       </div>

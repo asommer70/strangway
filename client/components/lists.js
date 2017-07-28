@@ -8,14 +8,6 @@ const Lists = ({lists}) => {
     return <List key={list._id} list={list} />
   });
 
-  // $.ajax({
-  //   method: 'get',
-  //   url: 'https://api.imgur.com/3/gallery/hot/viral/0',
-  //   success: function(res) {
-  //     console.log('res:', res);
-  //   }
-  // })
-
   return (
     <ul className="spaced no-bullet">
       {RenderedLists}

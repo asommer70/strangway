@@ -3,23 +3,19 @@ import ReactDOM from 'react-dom';
 import Header from './components/header';
 import Lists from './components/lists';
 import TodoLists from '../imports/collections/todo_lists';
+import Notes from '../imports/collections/notes';
 import ListForm from './components/list_form';
-// import { Template } from 'meteor/templating';
-// import './main.html';
-//
-// // Foundation JavaScript init.
-// Template.main.onRendered(function () {
-//   $(document).foundation();
-// });
 
 class App extends Component {
-  render() {
+  componentDidMount() {
     $(document).foundation();
+  }
 
+  render() {
     return (
       <div>
         <Header />
-        
+
         <div className="row">
           <div className="large-10 column">
             <br/>

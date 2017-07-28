@@ -5,6 +5,7 @@
 
 @import '{zurb:foundation-sites}/scss/util/util';
 
+// http://colorhunt.co/c/79325/
 $foundation-palette: (
   primary: #1779ba,
   secondary: #767676,
@@ -56,4 +57,39 @@ $foundation-palette: (
 
 .spaced li {
   margin-bottom: .7em;
+}
+
+.at-title > h3 {
+  text-align: left;
+}
+
+.at-form {
+  padding: 0 15px;
+  margin: 0;
+}
+
+#at-pwd-form {
+  button, .at-input.row {
+    margin-top: 30px;
+  }
+
+  .at-input.row > div.large-12.columns {
+    padding-left: 0;
+  }
+}
+
+.at-signin-link, .at-signup-link {
+  margin: 30px 0 0 0;
+  text-align: left;
+
+  p {
+    margin-left: 0;
+  }
+}
+
+#at-signUp {
+  padding-left: 0;
+}
+#at-signIn {
+  padding-left: 0;
 }
