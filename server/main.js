@@ -4,7 +4,6 @@ import { Notes } from '../imports/collections/notes';
 
 Meteor.startup(() => {
   const listsCount = TodoLists.find({}).count();
-  // console.log('listsCount:', listsCount);
 
   if (listsCount == 0) {
     TodoLists.insert({name: 'Daily', archive: false, createdAt: new Date()});

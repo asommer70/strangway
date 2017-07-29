@@ -16,12 +16,15 @@ Meteor.methods({
   },
 
   'notes.update': function(note, changes) {
-    console.log('notes.update changes:', changes);
     return Notes.update(note._id, { $set: changes })
   },
 
   'notes.share': function(note, email) {
     return Notes.update(note._id, { $push: { sharedWith: email } });
+  },
+
+  'notes.owner': function(note) {
+    return Meteor.users.findOne(note.ownerId).email[0].address;
   }
 });
 

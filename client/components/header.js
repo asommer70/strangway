@@ -13,6 +13,7 @@ class Header extends Component {
             <li><Link to="/notes">Notes</Link></li>
             <li><Link to="/journal">Journal</Link></li>
             <li><Link to="/contacts">Contacts</Link></li>
+            <li><Link to="/recipes">Recipes</Link></li>
           </ul>
         </div>
         <div className="top-bar-right">

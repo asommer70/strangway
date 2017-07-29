@@ -9,12 +9,17 @@ import NoteShare from './note_share';
 class Note extends Component {
   constructor(props) {
     super(props);
-    this.state = {title: ''};
+    this.state = {
+      title: '',
+      owner: ''
+    };
   }
 
   componentWillReceiveProps(props) {
-    console.log('props.note:', props.note);
-    this.setState({title: props.note.title});
+    this.setState({
+      title: props.note.title,
+      owner: props.owner
+    });
   }
 
   onTitleChange(e) {
@@ -34,7 +39,7 @@ class Note extends Component {
           <div className="large-8 columns">
             <br/>
             <input
-              value={this.props.note.title}
+              value={this.state.title}
               onChange={this.onTitleChange.bind(this)}
               onBlur={this.onTitleBlur.bind(this)}
               ref="title"
@@ -60,10 +65,11 @@ class Note extends Component {
           <div className="large-6 columns">
             <br/><hr/>
             <h6 className="subheader deets"><strong>Created:</strong> {moment(this.props.note.createdAt).fromNow()}</h6>
-            <h6 className="subheader deets float-right"><strong>Owner:</strong> ...</h6>
+            <h6 className="subheader deets float-right"><strong>Owner:</strong> {this.state.owner}</h6>
             <br/><br/>
           </div>
         </div>
+        <br/>
 
         <NoteShare note={this.props.note} />
       </div>
@@ -73,5 +79,12 @@ class Note extends Component {
 
 export default createContainer((props) => {
   Meteor.subscribe('notes');
-  return { note: Notes.findOne(props.match.params.id) }
+  const note = Notes.findOne(props.match.params.id);
+
+  let owner;
+  if (note) {
+    owner = Meteor.users.findOne(note.ownerId).emails[0].address
+  }
+
+  return { note, owner }
 }, Note);
