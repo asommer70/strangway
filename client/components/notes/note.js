@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { createContainer } from 'meteor/react-meteor-data';
-import { Notes } from '../../imports/collections/notes';
+import { Notes } from '../../../imports/collections/notes';
 import moment from 'moment';
 import NoteEditor from './note_editor';
 import NoteViewer from './note_viewer';

@@ -1,9 +1,9 @@
 import React from 'react';
-import { TodoLists } from '../../imports/collections/todo_lists';
 import { createContainer } from 'meteor/react-meteor-data';
 import { Link, browserHistory } from 'react-router-dom';
+import { TodoLists } from '../../../imports/collections/todo_lists';
 import List from './list';
-import NotesList from './notes_list';
+import NotesList from '../notes/notes_list';
 
 const Lists = (props) => {
   const RenderedLists = props.lists.map((list) => {

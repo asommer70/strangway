@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { createContainer } from 'meteor/react-meteor-data';
 import { Link } from 'react-router-dom';
-import { Notes } from '../../imports/collections/notes';
+import { Notes } from '../../../imports/collections/notes';
 
 class NotesList extends Component {
   constructor(props) {

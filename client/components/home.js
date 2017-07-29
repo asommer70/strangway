@@ -1,7 +1,7 @@
 import React from 'react';
 import Header from './header';
-import Lists from './lists';
-import ListForm from './list_form';
+import Lists from './lists/lists';
+import ListForm from './lists/list_form';
 
 export default (props) => {
   return (

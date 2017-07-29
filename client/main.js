@@ -2,12 +2,11 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { Switch, Router, Route, IndexRoute } from 'react-router';
 import createBrowserHistory from 'history/createBrowserHistory';
-// import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 
 import Home from './components/home';
 import Header from './components/header';
-import List from './components/list';
-import Note from './components/note';
+import List from './components/lists/list';
+import Note from './components/notes/note';
 
 import TodoLists from '../imports/collections/todo_lists';
 import Notes from '../imports/collections/notes';
