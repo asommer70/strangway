@@ -5,10 +5,13 @@ import moment from 'moment';
 import NoteEditor from './note_editor';
 import NoteViewer from './note_viewer';
 import NoteShare from './note_share';
+import NoteTitle from './note_title';
 
 class Note extends Component {
   constructor(props) {
     super(props);
+    // console.log('Note constructor props:', props);
+
     this.state = {
       title: '',
       owner: ''
@@ -16,47 +19,34 @@ class Note extends Component {
   }
 
   componentWillReceiveProps(props) {
+    // console.log('Note componentWillReceiveProps props:', props);
     this.setState({
       title: props.note.title,
       owner: props.owner
     });
   }
 
-  onTitleChange(e) {
-    this.setState({title: e.target.value});
-  }
-
-  onTitleBlur(e) {
-    Meteor.call('notes.update', this.props.note, {title: this.state.title});
-  }
-
   render() {
     if (!this.props.note) { return <div>Loading...</div> };
+    const owner = Meteor.users.findOne(this.props.note.ownerId).emails[0].address;
+
 
     return (
       <div>
         <div className="row">
           <div className="large-8 columns">
             <br/>
-            <input
-              value={this.state.title}
-              onChange={this.onTitleChange.bind(this)}
-              onBlur={this.onTitleBlur.bind(this)}
-              ref="title"
-              name="title"
-              type="text" placeholder="Title" />
+            <NoteTitle note={this.props.note} />
           </div>
         </div>
 
         <div className="row">
           <div className="large-6 column">
             <br/>
-            <h5>Content</h5>
             <NoteEditor note={this.props.note} />
           </div>
           <div className="large-6 column">
             <br/>
-            <h5>Rendered</h5>
             <NoteViewer note={this.props.note} />
           </div>
         </div>
@@ -65,7 +55,7 @@ class Note extends Component {
           <div className="large-6 columns">
             <br/><hr/>
             <h6 className="subheader deets"><strong>Created:</strong> {moment(this.props.note.createdAt).fromNow()}</h6>
-            <h6 className="subheader deets float-right"><strong>Owner:</strong> {this.state.owner}</h6>
+            <h6 className="subheader deets float-right"><strong>Owner:</strong> {owner}</h6>
             <br/><br/>
           </div>
         </div>
