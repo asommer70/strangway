@@ -49,6 +49,18 @@ class ListForm extends Component {
   }
 
   render() {
+    let deleteButton;
+    if (this.props.list) {
+      deleteButton = (
+        <button type="button" className="button alert tiny"
+          onClick={() => this.props.removeList(this.props.list)}>
+          Delete List
+        </button>
+      );
+    } else {
+      deleteButton = '';
+    }
+
     return (
       <div>
         <form onSubmit={this.handleSubmit.bind(this)}>
@@ -60,6 +72,7 @@ class ListForm extends Component {
             <div id="list-form-error" className="alert callout hide">
               <p>{this.state.error}</p>
             </div>
+            {deleteButton}
           </fieldset>
         </form>
       </div>

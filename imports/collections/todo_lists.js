@@ -15,7 +15,7 @@ Meteor.methods({
   },
 
   'todo_lists.remove': function(todo_list) {
-    return TodoLists.remove(todo_note);
+    return TodoLists.remove(todo_list);
   },
 })
 

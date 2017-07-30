@@ -19,7 +19,7 @@ class List extends Component {
           <h2>{this.props.list.name}</h2>
 
           <button type="button" className="button tiny" onClick={() => this.setState({edit: !this.state.edit})}>Edit</button>
-          {this.state.edit ? <ListForm list={this.props.list} /> : ''}
+          {this.state.edit ? <ListForm list={this.props.list} removeList={this.props.removeList} /> : ''}
 
           <div>
             Some Tasks...

@@ -13,7 +13,13 @@ class Lists extends Component {
   }
 
   selectList(self, list) {
-    self.setState({list: <List list={list} />});
+    self.setState({list: <List list={list} removeList={this.removeList.bind(this)} />});
+  }
+
+  removeList(list) {
+    Meteor.call('todo_lists.remove', list, () => {
+      this.setState({list: 'No Todo List selected... yet.'});
+    });
   }
 
   render() {
