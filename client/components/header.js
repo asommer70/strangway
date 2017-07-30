@@ -6,8 +6,6 @@ class Header extends Component {
   constructor(props) {
     super(props);
 
-    console.log('Header props:', props);
-
     this.state = {
       isActive: ''
     }
