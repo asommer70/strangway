@@ -17,7 +17,6 @@ const history = createBrowserHistory();
 class App extends Component {
   constructor(props) {
     super(props);
-    console.log('App props:', props);
   }
 
   componentDidMount() {
@@ -39,9 +38,10 @@ const routes = (
   <Router history={history}>
     <App history={history}>
       <Route exact path="/" component={Home} />
+      <Route exact path="/todolists" component={Home} />
       <Route path="/lists/:id" component={List} />
       <Route path="/notes/:id" component={Note} />
-      <Route path="/noteslist" component={NotesList} />
+      <Route exact path="/notes" component={NotesList} />
     </App>
   </Router>
 )

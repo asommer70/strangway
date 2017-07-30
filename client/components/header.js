@@ -1,10 +1,16 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import Accounts from './accounts';
 
 class Header extends Component {
   constructor(props) {
     super(props);
+
+    console.log('Header props:', props);
+
+    this.state = {
+      isActive: ''
+    }
   }
 
   createNote(e) {
@@ -21,16 +27,16 @@ class Header extends Component {
         <div className="top-bar-left">
           <ul className="dropdown menu" data-dropdown-menu>
             <li className="menu-text">Strangway</li>
-            <li className="is-active"><a href="/">Lists</a></li>
-            <li>
-              <Link to="/noteslist">Notes</Link>
+            <li><NavLink to="/todolists" activeClassName="is-active">Lists</NavLink></li>
+            <li className="white">
+              <NavLink to="/notes" className="white" activeClassName="is-active">Notes</NavLink>
                 <ul className="menu vertical">
                  <li><a href="#" onClick={this.createNote.bind(this)}>Create Note</a></li>
                 </ul>
             </li>
-            <li><Link to="/journal">Journal</Link></li>
-            <li><Link to="/contacts">Contacts</Link></li>
-            <li><Link to="/recipes">Recipes</Link></li>
+            <li><NavLink to="/journal" activeClassName="is-active">Journal</NavLink></li>
+            <li><NavLink to="/contacts" activeClassName="is-active">Contacts</NavLink></li>
+            <li><NavLink to="/recipes" activeClassName="is-active">Recipes</NavLink></li>
           </ul>
         </div>
         <div className="top-bar-right">

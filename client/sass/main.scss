@@ -55,6 +55,15 @@ $foundation-palette: (
 @include foundation-visibility-classes;
 @include foundation-float-classes;
 
+.is-active, .is-active:focus, .is-active:hover {
+  background-color: map-get($foundation-palette, primary);
+  color: white;
+}
+
+.white:hover {
+  color: white !important;
+}
+
 .spaced li {
   margin-bottom: .7em;
 }
