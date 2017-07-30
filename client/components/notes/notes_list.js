@@ -16,7 +16,7 @@ class NotesList extends Component {
     const RenderedNotes = this.props.notes.map((note) => {
       return (
         <li key={note._id}>
-          <Link to={'/notes/' + note._id}>{note._id}</Link>
+          <Link to={'/notes/' + note._id}>{note.title}</Link>
           <span className="float-right">
             <button type="button" className="button alert tiny" onClick={() => this.onNoteRemove(note)}>Remove</button>
           </span>
@@ -25,10 +25,13 @@ class NotesList extends Component {
     });
 
     return (
-      <div>
-        <ul className="notes-list no-bullet">
-          {RenderedNotes}
-        </ul>
+      <div className="row">
+        <div className="large-12 columns">
+          <br/>
+          <ul className="notes-list no-bullet">
+            {RenderedNotes}
+          </ul>
+        </div>
       </div>
     )
   }
