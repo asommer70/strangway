@@ -10,7 +10,6 @@ import NoteTitle from './note_title';
 class Note extends Component {
   constructor(props) {
     super(props);
-    // console.log('Note constructor props:', props);
 
     this.state = {
       title: '',
@@ -19,7 +18,6 @@ class Note extends Component {
   }
 
   componentWillReceiveProps(props) {
-    // console.log('Note componentWillReceiveProps props:', props);
     this.setState({
       title: props.note.title,
       owner: props.owner
