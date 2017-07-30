@@ -10,8 +10,12 @@ Meteor.methods({
     TodoLists.insert({name, archive: false, createdAt: new Date()});
   },
 
-  'todo_lists.update': function(list, changes) {
-    return TodoLists.update(list._id, { $set: changes })
+  'todo_lists.update': function(todo_list, changes) {
+    return TodoLists.update(todo_list._id, { $set: changes })
+  },
+
+  'todo_lists.remove': function(todo_list) {
+    return TodoLists.remove(todo_note);
   },
 })
 

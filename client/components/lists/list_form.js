@@ -10,42 +10,36 @@ class ListForm extends Component {
     };
   }
 
+  errorCheck(err, self) {
+    const $alert = $('#list-form-error');
+
+    if (err) {
+      self.setState({error: 'Name cannot be empty.'});
+      if ($alert.hasClass('hide')) {
+        $alert.toggleClass('hide');
+      }
+    } else {
+      self.setState({error: ''});
+      if (!$alert.hasClass('hide')) {
+        $alert.toggleClass('hide');
+      }
+
+      if (!self.props.list) {
+        this.setState({name: ''});
+      }
+    }
+  }
+
   handleSubmit(e) {
     e.preventDefault();
 
     if (this.props.list) {
       Meteor.call('todo_lists.update', this.props.list, {name: this.state.name}, (err) => {
-        const $alert = $('#list-form-error');
-
-        if (err) {
-          this.setState({error: 'Name cannot be empty.'});
-          if ($alert.hasClass('hide')) {
-            $alert.toggleClass('hide');
-          }
-        } else {
-          this.setState({error: ''});
-          if (!$alert.hasClass('hide')) {
-            $alert.toggleClass('hide');
-          }
-        }
+        this.errorCheck(err, this);
       });
     } else {
       Meteor.call('todo_lists.insert', this.state.name, (err) => {
-        const $alert = $('#list-form-error');
-
-        if (err) {
-          this.setState({error: 'Name cannot be empty.'});
-          if ($alert.hasClass('hide')) {
-            $alert.toggleClass('hide');
-          }
-        } else {
-          this.setState({error: ''});
-          if (!$alert.hasClass('hide')) {
-            $alert.toggleClass('hide');
-          }
-          // this.refs.input.value = '';
-          this.setState({name: ''});
-        }
+        this.errorCheck(err, this);
       });
     }
   }
