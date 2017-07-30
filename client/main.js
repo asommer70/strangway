@@ -17,6 +17,7 @@ const history = createBrowserHistory();
 class App extends Component {
   constructor(props) {
     super(props);
+    console.log('App props:', props);
   }
 
   componentDidMount() {
@@ -26,7 +27,7 @@ class App extends Component {
   render() {
     return (
       <div>
-        <Header />
+        <Header history={this.props.history} />
 
         {this.props.children}
       </div>
@@ -36,11 +37,11 @@ class App extends Component {
 
 const routes = (
   <Router history={history}>
-    <App>
+    <App history={history}>
       <Route exact path="/" component={Home} />
       <Route path="/lists/:id" component={List} />
-      <Route path="/notes" component={NotesList} />
       <Route path="/notes/:id" component={Note} />
+      <Route path="/noteslist" component={NotesList} />
     </App>
   </Router>
 )

@@ -17,6 +17,7 @@ class NotesList extends Component {
       return (
         <li key={note._id}>
           <Link to={'/notes/' + note._id}>{note.title}</Link>
+
           <span className="float-right">
             <button type="button" className="button alert tiny" onClick={() => this.onNoteRemove(note)}>Remove</button>
           </span>
