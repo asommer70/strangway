@@ -14,7 +14,7 @@ class NoteEditor extends Component {
       <CodeMirror
         value={this.props.note.content}
         onChange={this.onEditorChange.bind(this)}
-        options={{mode: 'markdown', lineNumbers: true}} />
+        options={{mode: 'markdown', lineWrapping: true}} />
     );
   }
 }
