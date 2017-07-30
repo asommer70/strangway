@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { createContainer } from 'meteor/react-meteor-data';
+// import { createContainer } from 'meteor/react-meteor-data';
 import moment from 'moment';
 import { TodoLists } from '../../../imports/collections/todo_lists';
 
@@ -19,13 +19,9 @@ class Task extends Component {
     });
   }
 
-  removeTask(listId, task) {
-    console.log('Task removeTask..');
-    Meteor.call('todo_lists.removeTask', listId, task);
-  }
-
   render() {
     const {task} = this.props;
+    console.log('Task render this.props.list:', this.props.list);
 
     return (
       <div className="row task">
@@ -45,7 +41,7 @@ class Task extends Component {
           <div className="subheader created-at float-right">{moment(task.createdAt).fromNow()}</div>
           <button className="remove-task button tiny secondary float-right"
             type="button"
-            onClick={() => this.removeTask(this.props.list._id, task)}>
+            onClick={() => this.props.removeTask(this.props.list, task)}>
             Remove
           </button>
 

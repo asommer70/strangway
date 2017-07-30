@@ -23,6 +23,7 @@ Meteor.methods({
   },
 
   'todo_lists.addTask': function(newTask) {
+    console.log('todo_lists.addTask newTask:', newTask);
     const task = {
       _id:  new Mongo.ObjectID(),
       title: newTask.title,
@@ -31,9 +32,11 @@ Meteor.methods({
       createdAt: new Date()
     }
 
-    return TodoLists.update(newTask.list._id, { $push: {tasks: task} }, () => {
+    const things = TodoLists.update(newTask.list._id, { $push: {tasks: task} }, (err, status) => {
       return TodoLists.findOne(newTask.list._id);
     });
+    console.log('things:', things);
+    return things;
   },
 
   'todo_lists.completeTask': function(todo_list, task) {
@@ -44,8 +47,8 @@ Meteor.methods({
     });
   },
 
-  'todo_lists.removeTask': function(listId, task) {
-    return TodoLists.update({_id: listId}, { $pull: { tasks: {_id: task._id} } });
+  'todo_lists.removeTask': function(list, task) {
+    return TodoLists.update({_id: list._id}, { $pull: { tasks: {_id: task._id} } });
   }
 })
 
