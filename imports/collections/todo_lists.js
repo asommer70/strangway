@@ -41,6 +41,13 @@ Meteor.methods({
     });
   },
 
+  'todo_lists.updateTask': function(updatedTask) {
+    TodoLists.update({
+      _id: updatedTask.list._id, 'tasks._id': updatedTask.task._id},
+      { $set: { 'tasks.$.title': updatedTask.newTitle }
+    });
+  },
+
   'todo_lists.removeTask': function(list, task) {
      TodoLists.update({_id: list._id}, { $pull: { tasks: {_id: task._id} } });
   }
