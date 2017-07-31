@@ -15,9 +15,7 @@ class Lists extends Component {
   selectList(self, list) {
     const listy = (
       <List list={list}
-        removeList={self.removeList.bind(this)}
-        removeTask={self.removeTask.bind(this)}
-        addTask={self.addTask.bind(this)} />
+        removeList={self.removeList.bind(this)}/>
     );
     self.setState({list: listy});
   }
@@ -26,19 +24,6 @@ class Lists extends Component {
     Meteor.call('todo_lists.remove', list, () => {
       this.setState({list: 'No Todo List selected... yet.'});
     });
-  }
-
-  addTask(list, task) {
-    // e.preventDefault();
-    console.log('Lists addTask list:', list, 'task:', task);
-    Meteor.call('todo_lists.addTask', {list, title: task.value}, (list) => {
-      // this.refs.title.value = '';
-      console.log('List addTask list:', list);
-    });
-  }
-
-  removeTask(list, task) {
-    Meteor.call('todo_lists.removeTask', list, task);
   }
 
   render() {
@@ -63,9 +48,7 @@ class Lists extends Component {
   }
 }
 
-export default Lists;
-
-// export default createContainer(() => {
-//   Meteor.subscribe('lists');
-//   return { lists: TodoLists.find({}).fetch() }
-// }, Lists);
+export default createContainer(() => {
+  Meteor.subscribe('lists');
+  return { lists: TodoLists.find({}).fetch() }
+}, Lists);

@@ -14,12 +14,24 @@ class List extends Component {
     }
   }
 
+  addTask(e) {
+    e.preventDefault();
+
+    Meteor.call('todo_lists.addTask', {list: this.props.list, title: this.refs.title.value}, (list) => {
+      this.refs.title.value = '';
+    });
+  }
+
+  removeTask(list, task) {
+    Meteor.call('todo_lists.removeTask', list, task);
+  }
+
   render() {
     const renderedTasks = this.props.list.tasks.map((task) => {
       return (
         <div className="row" key={task._id}>
           <div className="large-12 column">
-            <Task list={this.props.list} task={task} removeTask={this.props.removeTask.bind(this)} />
+            <Task list={this.props.list} task={task} removeTask={this.removeTask.bind(this)} />
           </div>
         </div>
       );
@@ -30,7 +42,7 @@ class List extends Component {
         <div className="large-8 columns">
           <h2>{this.props.list.name}</h2>
 
-          <form onSubmit={ (e) => {e.preventDefault(); this.props.addTask(this.props.list, this.refs.title); this.refs.title = '';} } action="#">
+          <form onSubmit={ this.addTask.bind(this) } action="#">
             <input type="text" name="title" ref="title" placeholder="New task..." />
           </form>
           <hr/><br/>
@@ -50,9 +62,7 @@ class List extends Component {
   }
 }
 
-export default List;
-
-// export default createContainer((props) => {
-//   Meteor.subscribe('lists');
-//   return { lists: TodoLists.findOne(props.list._id) }
-// }, List);
+export default createContainer((props) => {
+  Meteor.subscribe('lists');
+  return { list: TodoLists.findOne(props.list._id) }
+}, List);

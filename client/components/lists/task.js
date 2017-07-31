@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-// import { createContainer } from 'meteor/react-meteor-data';
 import moment from 'moment';
 import { TodoLists } from '../../../imports/collections/todo_lists';
 
@@ -21,7 +20,6 @@ class Task extends Component {
 
   render() {
     const {task} = this.props;
-    console.log('Task render this.props.list:', this.props.list);
 
     return (
       <div className="row task">
@@ -52,7 +50,3 @@ class Task extends Component {
 }
 
 export default Task;
-// export default createContainer((props) => {
-//   Meteor.subscribe('lists');
-//   return { lists: TodoLists.findOne(props.list._id) }
-// }, Task);
