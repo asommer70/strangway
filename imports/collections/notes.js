@@ -4,7 +4,7 @@ Meteor.methods({
   'notes.insert': function() {
     return Notes.insert({
       title: '',
-      content: '',
+      content: "\n\n\n\n\n\n\n\n\n\n\n\n",
       sharedWith: [],
       ownerId: this.userId,
       createdAt: new Date()
