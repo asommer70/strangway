@@ -29,7 +29,13 @@ class Lists extends Component {
   render() {
     const RenderedLists = this.props.lists.map((list) => {
       return (
-        <li key={list._id}><a href="#" onClick={() => this.selectList(this, list)}>{list.name}</a></li>
+        <li key={list._id}>
+          <a href="#" onClick={() => this.selectList(this, list)}>{list.name}</a>
+
+          &nbsp;&nbsp;
+
+          <span className="badge primary float-right">{list.tasks.filter((task) => { if (!task.complete) { return task } }).length}</span>
+        </li>
       )
     });
 
