@@ -19,4 +19,4 @@ Meteor.methods({
   },
 });
 
-export const Notes = new Mongo.Collection('journals');
+export const Journals = new Mongo.Collection('journals');

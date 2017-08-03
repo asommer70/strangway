@@ -8,8 +8,12 @@ class JournalsList extends Component {
     super(props);
   }
 
-  onNoteRemove(note) {
-    Meteor.call('notes.remove', note);
+  onJournalRemove(journal) {
+    Meteor.call('journals.remove', journal);
+  }
+
+  createJournal() {
+    console.log('createJournal...');
   }
 
   render() {
@@ -27,11 +31,19 @@ class JournalsList extends Component {
 
     return (
       <div className="row">
-        <div className="large-12 columns">
+        <div className="large-4 columns">
           <br/>
           <ul className="notes-list no-bullet">
             {RenderedJournals}
           </ul>
+        </div>
+        <div className="large-6 columns">
+          <h2>Middle stuff...</h2>
+        </div>
+        <div className="large-2 columns">
+          <form>
+            <input ref="newJournal" type="text" placeholder="New Journal Name" onClick={this.createJournal.bind(this)}/>
+          </form>
         </div>
       </div>
     )
@@ -39,6 +51,7 @@ class JournalsList extends Component {
 }
 
 export default createContainer(() => {
+  console.log('createContainer JournalsList...');
   Meteor.subscribe('journals');
-  return { notes: Journals.find({}).fetch() };
+  return { journals: Journals.find({}).fetch() };
 }, JournalsList);

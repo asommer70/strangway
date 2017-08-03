@@ -32,7 +32,7 @@ class Header extends Component {
                  <li><a href="#" onClick={this.createNote.bind(this)}>Create Note</a></li>
                 </ul>
             </li>
-            <li><NavLink to="/journal" activeClassName="is-active">Journal</NavLink></li>
+            <li><NavLink to="/journals" activeClassName="is-active">Journals</NavLink></li>
             <li><NavLink to="/contacts" activeClassName="is-active">Contacts</NavLink></li>
             <li><NavLink to="/recipes" activeClassName="is-active">Recipes</NavLink></li>
           </ul>
