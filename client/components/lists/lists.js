@@ -27,6 +27,8 @@ class Lists extends Component {
   }
 
   render() {
+    if (!this.props.lists) { return <div>No Lists... yet.</div>; }
+      
     const RenderedLists = this.props.lists.map((list) => {
       return (
         <li key={list._id}>

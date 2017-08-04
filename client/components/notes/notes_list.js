@@ -13,6 +13,8 @@ class NotesList extends Component {
   }
 
   render() {
+    if (!this.props.notes) { return <div>No Notes... yet.</div>; }
+
     const RenderedNotes = this.props.notes.map((note) => {
       return (
         <li key={note._id}>
