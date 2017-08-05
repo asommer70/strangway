@@ -28,9 +28,9 @@ class Header extends Component {
             <li><NavLink to="/todolists" activeClassName="is-active">Lists</NavLink></li>
             <li className="white">
               <NavLink to="/notes" className="white" activeClassName="is-active">Notes</NavLink>
-                <ul className="menu vertical">
-                 <li><a href="#" onClick={this.createNote.bind(this)}>Create Note</a></li>
-                </ul>
+              <ul className="menu vertical">
+               <li><a href="#" onClick={this.createNote.bind(this)}>Create Note</a></li>
+              </ul>
             </li>
             <li><NavLink to="/journals" activeClassName="is-active">Journals</NavLink></li>
             <li><NavLink to="/contacts" activeClassName="is-active">Contacts</NavLink></li>
