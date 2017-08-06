@@ -1,6 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 import { TodoLists } from '../imports/collections/todo_lists';
 import { Notes } from '../imports/collections/notes';
+import { Folders } from '../imports/collections/folders';
 import { Journals } from '../imports/collections/journals';
 
 Meteor.startup(() => {
@@ -31,5 +32,9 @@ Meteor.startup(() => {
 
   Meteor.publish('journals', function() {
     return Journals.find({}, {ownerId: this.userId, limit: 20});
+  });
+
+  Meteor.publish('folders', function() {
+    return Folders.find({}, {ownerId: this.userId, limit: 20});
   });
 });
