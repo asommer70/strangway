@@ -56,13 +56,14 @@ class Task extends Component {
             onChange={this.checkTask.bind(this)}/>
         </div>
 
-        <div className="large-11 column">
+        <div className="large-8 column">
           <label className={this.state.complete ? 'task-label checked' : 'task-label'} htmlFor={task._id}>
               {title}
           </label>
+        </div>
 
-          <div className="subheader created-at float-right">{moment(task.createdAt).fromNow()}</div>
-          <button className="task-button button tiny alert float-right" type="button" onClick={() => this.props.removeTask(this.props.list, task)}>
+        <div className="large-3 column text-right">
+          <button className="task-button button tiny alert" type="button" onClick={() => this.props.removeTask(this.props.list, task)}>
             <svg version="1.1" baseProfile="basic"
                xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="16px" height="16px"
                viewBox="0 0 128 128" xmlSpace="preserve">
@@ -70,7 +71,7 @@ class Task extends Component {
             </svg>
           </button>
 
-          <button className="task-button button tiny primary float-right" type="button" onClick={() => this.setState({edit: !this.state.edit, title: this.props.task.title})}>
+          <button className="task-button button tiny primary" type="button" onClick={() => this.setState({edit: !this.state.edit, title: this.props.task.title})}>
             <svg version="1.1" baseProfile="basic"
                xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="16px" height="16px"
                viewBox="0 0 128 128" xmlSpace="preserve">
@@ -78,6 +79,8 @@ class Task extends Component {
             </svg>
           </button>
 
+          <br />
+          <div className="subheader created-at">{moment(task.createdAt).fromNow()}</div>
         </div>
       </div>
     );
