@@ -27,6 +27,8 @@ class List extends Component {
   }
 
   render() {
+    if (!this.props.list) { return <div></div> }
+
     const renderedTasks = this.props.list.tasks.map((task) => {
       return (
         <div className="row" key={task._id}>
@@ -51,7 +53,7 @@ class List extends Component {
               <button type="button" className="button tiny" onClick={() => this.setState({edit: !this.state.edit})}>
                 Edit Todo List
               </button>
-              {this.state.edit ? <ListForm list={this.props.list} removeList={this.props.removeList} /> : ''}
+              {this.state.edit ? <ListForm list={this.props.list} removeList={this.props.removeList} idx={this.props.idx} /> : ''}
             </div>
           </div>
 

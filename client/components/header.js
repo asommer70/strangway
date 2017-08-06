@@ -25,7 +25,9 @@ class Header extends Component {
         <div className="top-bar-left">
           <ul className="dropdown menu" data-dropdown-menu>
             <li className="menu-text">Strangway</li>
-            <li><NavLink to="/todolists" activeClassName="is-active">Lists</NavLink></li>
+            <li>
+              <NavLink to="/todolists" activeClassName="is-active">Lists</NavLink>
+            </li>
             <li className="white">
               <NavLink to="/notes" className="white" activeClassName="is-active">Notes</NavLink>
               <ul className="menu vertical">

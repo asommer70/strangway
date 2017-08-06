@@ -6,16 +6,15 @@ import ListForm from './lists/list_form';
 import { TodoLists } from '../../imports/collections/todo_lists';
 
 const Home = (props) => {
+  // <div className="large-2 column">
+  //   <ListForm />
+  // </div>
   return (
     <div>
       <div className="row">
-        <div className="large-10 column">
+        <div className="large-12 column">
           <br/>
           <Lists lists={props.lists} history={props.history} />
-        </div>
-
-        <div className="large-2 column">
-          <ListForm />
         </div>
       </div>
     </div>

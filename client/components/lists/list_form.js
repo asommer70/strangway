@@ -53,7 +53,7 @@ class ListForm extends Component {
     if (this.props.list) {
       deleteButton = (
         <button type="button" className="button alert tiny"
-          onClick={() => this.props.removeList(this.props.list)}>
+          onClick={this.props.removeList} data-idx={this.props.idx}>
           Delete List
         </button>
       );

@@ -3,40 +3,43 @@ import { createContainer } from 'meteor/react-meteor-data';
 import { Link, browserHistory } from 'react-router-dom';
 import { TodoLists } from '../../../imports/collections/todo_lists';
 import List from './list';
+import ListForm from './list_form';
 
 class Lists extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      list: 'No Todo List selected... yet.'
+      list: 'No Todo List selected... yet.',
+      creatList: false
     };
   }
 
-  selectList(self, list) {
+  selectList(e) {
+    e.preventDefault();
     const listy = (
-      <List list={list}
-        removeList={self.removeList.bind(this)}/>
+      <List list={this.props.lists[e.target.dataset.idx]}
+        removeList={this.removeList.bind(this)} idx={e.target.dataset.idx} />
     );
-    self.setState({list: listy});
+    this.setState({list: listy});
   }
 
-  removeList(list) {
-    Meteor.call('todo_lists.remove', list, () => {
-      this.setState({list: 'No Todo List selected... yet.'});
+  removeList(e) {
+    Meteor.call('todo_lists.remove', this.props.lists[e.target.dataset.idx], () => {
+      this.setState({list: 'List removed, please select another.'});
     });
   }
 
   render() {
     if (!this.props.lists) { return <div>No Lists... yet.</div>; }
-      
-    const RenderedLists = this.props.lists.map((list) => {
+
+    const RenderedLists = this.props.lists.map((list, idx) => {
       return (
         <li key={list._id}>
-          <a href="#" onClick={() => this.selectList(this, list)}>{list.name}</a>
+          <a href="#" onClick={this.selectList.bind(this)} data-idx={idx}>{list.name}</a>
 
-          &nbsp;&nbsp;
-
-          <span className="badge primary float-right">{list.tasks.filter((task) => { if (!task.complete) { return task } }).length}</span>
+          <span className="badge primary float-right">
+            {list.tasks ? list.tasks.filter((task) => { if (!task.complete) { return task } }).length : ''}
+          </span>
         </li>
       )
     });
@@ -47,6 +50,12 @@ class Lists extends Component {
           <ul className="spaced no-bullet">
             {RenderedLists}
           </ul>
+
+          <br/><hr/>
+          <button type="button" className="button tiny" onClick={() => this.setState({createList: !this.state.createList})}>
+            Create List
+          </button>
+          {this.state.createList ? <ListForm /> : '' }
         </div>
         <div className="large-10 columns">
           {this.state.list}
