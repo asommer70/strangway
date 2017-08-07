@@ -37,7 +37,7 @@ class Lists extends Component {
         <li key={list._id}>
           <a href="#" onClick={this.selectList.bind(this)} data-idx={idx}>{list.name}</a>
 
-          <span className="badge primary float-right">
+          <span className="badge warning float-right">
             {list.tasks ? list.tasks.filter((task) => { if (!task.complete) { return task } }).length : ''}
           </span>
         </li>

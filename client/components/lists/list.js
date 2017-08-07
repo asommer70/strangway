@@ -76,5 +76,18 @@ class List extends Component {
 
 export default createContainer((props) => {
   Meteor.subscribe('lists');
-  return { list: TodoLists.findOne(props.list._id) }
+
+  // Sort the tasks on complete field.
+  const list = TodoLists.findOne(props.list._id);
+  list.tasks.sort((a, b) => {
+    if (a.complete) {
+      return 1;
+    } else if (a.complete && b.complete) {
+      return 0;
+    } else {
+      return -1;
+    }
+  });
+  
+  return { list }
 }, List);
