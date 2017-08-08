@@ -29,7 +29,7 @@ class App extends Component {
       <div>
         <Header history={this.props.history} />
 
-        {this.props.children}
+        {Meteor.userId() ? this.props.children : <div>Please Sign In.</div>}
       </div>
     );
   }
