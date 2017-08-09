@@ -21,8 +21,7 @@ class Header extends Component {
 
   signOut(e) {
     Meteor.logout();
-    this.props.history.push('/');
-    window.reload();
+    window.location.href = '/';
   }
 
   render() {
@@ -33,7 +32,7 @@ class Header extends Component {
             <ul className="dropdown menu" data-dropdown-menu>
               <li className="menu-text">Strangway</li>
               <li>
-                <NavLink to="/todolists" activeClassName="is-active">Lists</NavLink>
+                <NavLink exact to="/" activeClassName="is-active">Lists</NavLink>
               </li>
               <li className="white">
                 <NavLink to="/notes" className="white" activeClassName="is-active">Notes</NavLink>
