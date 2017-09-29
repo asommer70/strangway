@@ -7,7 +7,7 @@ import (
 type Folder struct {
 	gorm.Model
 	Name string
-	Lists []List
+	Notes []Note
 }
 
 

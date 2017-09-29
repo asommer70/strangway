@@ -5,9 +5,9 @@ import (
 )
 
 func CreateTables(db *gorm.DB) {
-	lt := db.HasTable(&List{})
-	if !lt {
-		db.AutoMigrate(&List{})
+	nt := db.HasTable(&Note{})
+	if !nt {
+		db.AutoMigrate(&Note{})
 	}
 
 	ft := db.HasTable(&Folder{})
