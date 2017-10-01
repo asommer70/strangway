@@ -2,9 +2,9 @@ package schema
 
 import (
 	"github.com/graphql-go/graphql"
-	"encoding/json"
+	"strangway/db"
+	"strangway/models"
 	"fmt"
-	"log"
 )
 
 var noteType = graphql.NewObject(graphql.ObjectConfig{
@@ -19,9 +19,6 @@ var noteType = graphql.NewObject(graphql.ObjectConfig{
 		"content": &graphql.Field{
 			Type: graphql.Boolean,
 		},
-		"folder": &graphql.Field{
-			Type: folderType,
-		},
 		"createdAt": &graphql.Field{
 			Type: graphql.DateTime,
 		},
@@ -33,6 +30,14 @@ var noteType = graphql.NewObject(graphql.ObjectConfig{
 		},
 	},
 })
+
+//"folder": &graphql.Field{
+//Type: folderType,
+//Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+//log.Println("p:", p)
+//return "world", nil
+//},
+//},
 
 var folderType = graphql.NewObject(graphql.ObjectConfig{
 	Name: "Folder",
@@ -56,34 +61,66 @@ var folderType = graphql.NewObject(graphql.ObjectConfig{
 })
 
 
-func QueryTest() {
-	// Schema
-	fields := graphql.Fields{
+var RootQuery = graphql.NewObject(graphql.ObjectConfig{
+	Name: "RootQuery",
+	Fields: graphql.Fields{
 		"note": &graphql.Field{
-			Type: graphql.String,
-			Resolve: func(p graphql.ResolveParams) (interface{}, error) {
-				return "world", nil
+			Type:        noteType,
+			Description: "Get single note",
+			Args: graphql.FieldConfigArgument{
+				"id": &graphql.ArgumentConfig{
+					Type: graphql.String,
+				},
+			},
+			Resolve: func(params graphql.ResolveParams) (interface{}, error) {
+				db := db.Connect()
+				defer db.Close()
+
+				var note models.Note
+
+				idQuery, isOK := params.Args["id"].(string)
+				if isOK {
+					// Search for el with id
+					db.First(&note, idQuery)
+				}
+
+				return note, nil
 			},
 		},
+
+		"notes": &graphql.Field{
+			Type:        graphql.NewList(noteType),
+			Description: "List of notes.",
+			Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+				db := db.Connect()
+				defer db.Close()
+
+				var notes []models.Note
+
+				return db.Find(&notes), nil
+			},
+		},
+	},
+})
+
+// define schema, with our rootQuery and rootMutation
+var Schema, _ = graphql.NewSchema(graphql.SchemaConfig{
+	Query:    RootQuery,
+})
+
+//SchemaConfig := graphql.SchemaConfig{Query: graphql.NewObject(RootQuery)}
+//Schema, err := graphql.NewSchema(SchemaConfig)
+//if err != nil {
+//	log.Fatalf("failed to create new schema, error: %v", err)
+//}
+
+func ExecuteQuery(query string, schema graphql.Schema) *graphql.Result {
+	result := graphql.Do(graphql.Params{
+		Schema:        schema,
+		RequestString: query,
+	})
+	if len(result.Errors) > 0 {
+		fmt.Printf("wrong result, unexpected errors: %v", result.Errors)
 	}
-
-	rootQuery := graphql.ObjectConfig{Name: "RootQuery", Fields: fields}
-
-	schemaConfig := graphql.SchemaConfig{Query: graphql.NewObject(rootQuery)}
-	schema, err := graphql.NewSchema(schemaConfig)
-	if err != nil {
-		log.Fatalf("failed to create new schema, error: %v", err)
-	}
-
-	// Query
-	query := `{hello}`
-	params := graphql.Params{Schema: schema, RequestString: query}
-
-	r := graphql.Do(params)
-	if len(r.Errors) > 0 {
-		log.Fatalf("failed to execute graphql operation, errors: %+v", r.Errors)
-	}
-	rJSON, _ := json.Marshal(r)
-
-	fmt.Printf("%s \n", rJSON) // {“data”:{“hello”:”world”}}
+	return result
 }

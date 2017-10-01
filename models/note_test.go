@@ -35,3 +35,26 @@ func TestCreateDeleteNote(t *testing.T) {
 		t.Errorf("Expected nn.Name to be '' but it is not...")
 	}
 }
+
+func TestFindAllNotes(t *testing.T) {
+	note := Note{
+		Name: "09-29-2017",
+		Content: "##To Do:\n* [ ] Stuff\n* [ ] More stuff\n* [ ] Other things",
+	}
+	n := Note{
+		Name: "10-01-2017",
+		Content: "##To Do:\n* [ ] Many Things\n* [ ] More things\n* [ ] Other stuff",
+	}
+	ldb.Create(&note)
+	ldb.Create(&n)
+
+	var notes []Note
+	ldb.Find(&notes)
+
+	if len(notes) != 2 {
+		t.Errorf("Expected len(notes) to be 2 but it is %v", len(notes))
+	}
+
+	ldb.Delete(&note)
+	ldb.Delete(&n)
+}
