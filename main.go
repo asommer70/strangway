@@ -1,11 +1,11 @@
 package main
 
 import (
-"log"
-"github.com/julienschmidt/httprouter"
-"strangway/controllers"
-"strangway/db"
-"net/http"
+	"log"
+	"github.com/julienschmidt/httprouter"
+	"strangway/controllers"
+	"strangway/db"
+	"net/http"
 )
 
 
