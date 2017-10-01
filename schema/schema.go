@@ -7,10 +7,59 @@ import (
 	"log"
 )
 
+var noteType = graphql.NewObject(graphql.ObjectConfig{
+	Name: "Note",
+	Fields: graphql.Fields{
+		"id": &graphql.Field{
+			Type: graphql.Int,
+		},
+		"name": &graphql.Field{
+			Type: graphql.String,
+		},
+		"content": &graphql.Field{
+			Type: graphql.Boolean,
+		},
+		"folder": &graphql.Field{
+			Type: folderType,
+		},
+		"createdAt": &graphql.Field{
+			Type: graphql.DateTime,
+		},
+		"updatedAt": &graphql.Field{
+			Type: graphql.DateTime,
+		},
+		"deletedAt": &graphql.Field{
+			Type: graphql.DateTime,
+		},
+	},
+})
+
+var folderType = graphql.NewObject(graphql.ObjectConfig{
+	Name: "Folder",
+	Fields: graphql.Fields{
+		"id": &graphql.Field{
+			Type: graphql.Int,
+		},
+		"name": &graphql.Field{
+			Type: graphql.String,
+		},
+		"createdAt": &graphql.Field{
+			Type: graphql.DateTime,
+		},
+		"updatedAt": &graphql.Field{
+			Type: graphql.DateTime,
+		},
+		"deletedAt": &graphql.Field{
+			Type: graphql.DateTime,
+		},
+	},
+})
+
+
 func QueryTest() {
 	// Schema
 	fields := graphql.Fields{
-		"hello": &graphql.Field{
+		"note": &graphql.Field{
 			Type: graphql.String,
 			Resolve: func(p graphql.ResolveParams) (interface{}, error) {
 				return "world", nil
