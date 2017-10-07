@@ -4,6 +4,7 @@ import (
 	"github.com/graphql-go/graphql"
 	"strangway/db"
 	"strangway/models"
+	"github.com/fatih/structs"
 	"fmt"
 )
 
@@ -84,6 +85,10 @@ var RootQuery = graphql.NewObject(graphql.ObjectConfig{
 					db.First(&note, idQuery)
 				}
 
+				//fmt.Print("note:", note, "\n")
+				//noteMap := structs.Map(note)
+				//fmt.Println("noteMap:", noteMap["Name"])
+
 				return note, nil
 			},
 		},
@@ -96,8 +101,30 @@ var RootQuery = graphql.NewObject(graphql.ObjectConfig{
 				defer db.Close()
 
 				var notes []models.Note
+				db.Find(&notes);
 
-				return db.Find(&notes), nil
+				//db := models.GetAdamaDB()
+				//organization := models.Organization{}
+				//db.Where(&models.Organization{ID: p.Source.(models.User).OrganizationID}).Find(&organization)
+
+				//rows, _ := db.Find(&notes).Rows()
+				//defer rows.Close()
+				//
+				//for rows.Next() {
+				//	var note models.Note
+				//	db.ScanRows(rows, &note)
+				//	fmt.Println("note:", note)
+				//}
+
+				//for _, i := range notes {
+				//	fmt.Println("i:", i)
+				//}
+				fmt.Printf("%T\n", notes)
+				fmt.Println("len(notes):", len(notes))
+				notesMap := structs.Map(notes)
+				fmt.Println("notesMap:", notesMap);
+
+				return notesMap, nil
 			},
 		},
 	},
@@ -122,5 +149,7 @@ func ExecuteQuery(query string, schema graphql.Schema) *graphql.Result {
 	if len(result.Errors) > 0 {
 		fmt.Printf("wrong result, unexpected errors: %v", result.Errors)
 	}
+
+	fmt.Println("ExecuteQuery result.Data:", result.Data)
 	return result
 }
