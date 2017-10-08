@@ -6,11 +6,12 @@ import (
 	"strangway/db"
 	"strangway/models"
 	"github.com/jinzhu/gorm"
-	"log"
+	"fmt"
 )
 
 var ldb *gorm.DB
 var noteID uint
+var testCount int
 
 func init() {
 	ldb = db.Connect()
@@ -33,84 +34,39 @@ func init() {
 }
 
 func cleanNotesTable() {
-	ldb.Delete(models.Note{})
+	ldb.Unscoped().Delete(models.Note{})
 }
 
 
-//func TestGraphQLQueryNotes(t *testing.T) {
-//	defer cleanNotesTable()
-//	// Schema
-//	//qf := graphql.Fields{
-//	//	"note": &graphql.Field{
-//	//		Type: graphql.String,
-//	//		Resolve: func(p graphql.ResolveParams) (interface{}, error) {
-//	//			return "world", nil
-//	//		},
-//	//	},
-//	//}
-//
-//	//rootQuery := graphql.ObjectConfig{Name: "RootQuery", Fields: qf}
-//
-//	//{todo(id:"b"){id,text,done}}'
-//
-//	result := ExecuteQuery("{notes{id, name}}", Schema)
-//	log.Println("result:", result)
-//	log.Println("result.Data:", result.Data)
-//	json.NewEncoder(os.Stdout).Encode(result)
-//	t.Errorf("result: %v", result)
-//
-//
-//	//// Query
-//	//query := `{hello}`
-//	//params := graphql.Params{Schema: schema, RequestString: query}
-//
-//	//r := graphql.Do(params)
-//	//if len(r.Errors) > 0 {
-//	//	log.Fatalf("failed to execute graphql operation, errors: %+v", r.Errors)
-//	//}
-//	//rJSON, _ := json.Marshal(r)
-//	//
-//	//fmt.Printf("%s \n", rJSON) // {“data”:{“hello”:”world”}}
-//}
+func TestGraphQLQueryNotes(t *testing.T) {
+	result := ExecuteQuery("{notes{id, name}}", Schema)
+
+	resMap := result.Data.(map[string]interface{})
+	notes := resMap["notes"].([]interface{})
+
+	if (len(notes) != 2) {
+		t.Errorf("Expected len(notes) to be 2 but it is %v", len(notes))
+	}
+
+	testCount++
+	if (testCount == 2) {
+		cleanNotesTable()
+	}
+}
 
 func TestGraphQLQueryOneNote(t *testing.T) {
-	defer cleanNotesTable()
-	// Schema
-	//qf := graphql.Fields{
-	//	"note": &graphql.Field{
-	//		Type: graphql.String,
-	//		Resolve: func(p graphql.ResolveParams) (interface{}, error) {
-	//			return "world", nil
-	//		},
-	//	},
-	//}
-
-	//rootQuery := graphql.ObjectConfig{Name: "RootQuery", Fields: qf}
-
-	//{todo(id:"b"){id,text,done}}'
-
-	//log.Println("string(int(noteID)) %v:", noteID)
-	//query := fmt.Sprintf(`{note(id: "%v"){id, name}}`, noteID)
-	query := "{notes}"
-	//log.Println("query:", query)
-
+	query := fmt.Sprintf(`{note(id: "%v"){id, name}}`, noteID)
 	result := ExecuteQuery(query, Schema)
-	//log.Println("result:", result)
-	log.Println("result.Data:", result.Data)
-	//json.NewEncoder(os.Stdout).Encode(result)
 
-	t.Errorf("result: %v", result)
+	resMap := result.Data.(map[string]interface{})
+	note := resMap["note"].(map[string]interface{})
 
+	if (note["name"] != "09-29-2017") {
+		t.Errorf("Expected note[name] to be '09-29-2017' but it is %v", note["name"])
+	}
 
-	//// Query
-	//query := `{hello}`
-	//params := graphql.Params{Schema: schema, RequestString: query}
-
-	//r := graphql.Do(params)
-	//if len(r.Errors) > 0 {
-	//	log.Fatalf("failed to execute graphql operation, errors: %+v", r.Errors)
-	//}
-	//rJSON, _ := json.Marshal(r)
-	//
-	//fmt.Printf("%s \n", rJSON) // {“data”:{“hello”:”world”}}
+	testCount++
+	if (testCount == 2) {
+		cleanNotesTable()
+	}
 }

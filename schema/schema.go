@@ -4,7 +4,6 @@ import (
 	"github.com/graphql-go/graphql"
 	"strangway/db"
 	"strangway/models"
-	"github.com/fatih/structs"
 	"fmt"
 )
 
@@ -32,14 +31,6 @@ var noteType = graphql.NewObject(graphql.ObjectConfig{
 	},
 })
 
-//"folder": &graphql.Field{
-//Type: folderType,
-//Resolve: func(p graphql.ResolveParams) (interface{}, error) {
-//log.Println("p:", p)
-//return "world", nil
-//},
-//},
-
 var folderType = graphql.NewObject(graphql.ObjectConfig{
 	Name: "Folder",
 	Fields: graphql.Fields{
@@ -61,7 +52,7 @@ var folderType = graphql.NewObject(graphql.ObjectConfig{
 	},
 })
 
-
+// RootQuery ... the GraphQL rootQuery object.
 var RootQuery = graphql.NewObject(graphql.ObjectConfig{
 	Name: "RootQuery",
 	Fields: graphql.Fields{
@@ -81,13 +72,8 @@ var RootQuery = graphql.NewObject(graphql.ObjectConfig{
 
 				idQuery, isOK := params.Args["id"].(string)
 				if isOK {
-					// Search for el with id
 					db.First(&note, idQuery)
 				}
-
-				//fmt.Print("note:", note, "\n")
-				//noteMap := structs.Map(note)
-				//fmt.Println("noteMap:", noteMap["Name"])
 
 				return note, nil
 			},
@@ -103,44 +89,18 @@ var RootQuery = graphql.NewObject(graphql.ObjectConfig{
 				var notes []models.Note
 				db.Find(&notes);
 
-				//db := models.GetAdamaDB()
-				//organization := models.Organization{}
-				//db.Where(&models.Organization{ID: p.Source.(models.User).OrganizationID}).Find(&organization)
-
-				//rows, _ := db.Find(&notes).Rows()
-				//defer rows.Close()
-				//
-				//for rows.Next() {
-				//	var note models.Note
-				//	db.ScanRows(rows, &note)
-				//	fmt.Println("note:", note)
-				//}
-
-				//for _, i := range notes {
-				//	fmt.Println("i:", i)
-				//}
-				fmt.Printf("%T\n", notes)
-				fmt.Println("len(notes):", len(notes))
-				notesMap := structs.Map(notes)
-				fmt.Println("notesMap:", notesMap);
-
-				return notesMap, nil
+				return notes, nil
 			},
 		},
 	},
 })
 
-// define schema, with our rootQuery and rootMutation
+// Schema ... define schema, with our rootQuery and rootMutation.
 var Schema, _ = graphql.NewSchema(graphql.SchemaConfig{
 	Query:    RootQuery,
 })
 
-//SchemaConfig := graphql.SchemaConfig{Query: graphql.NewObject(RootQuery)}
-//Schema, err := graphql.NewSchema(SchemaConfig)
-//if err != nil {
-//	log.Fatalf("failed to create new schema, error: %v", err)
-//}
-
+// ExecuteQuery ... make the actual query to GraphQL.
 func ExecuteQuery(query string, schema graphql.Schema) *graphql.Result {
 	result := graphql.Do(graphql.Params{
 		Schema:        schema,
