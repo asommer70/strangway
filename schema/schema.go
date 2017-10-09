@@ -126,6 +126,29 @@ var RootQuery = graphql.NewObject(graphql.ObjectConfig{
 				return folder, nil
 			},
 		},
+
+		"folderNotes": &graphql.Field{
+			Type: graphql.NewList(noteType),
+			Description: "Get notes in a folder",
+			Args: graphql.FieldConfigArgument{
+				"id": &graphql.ArgumentConfig{
+					Type: graphql.String,
+				},
+			},
+			Resolve: func(params graphql.ResolveParams) (interface{}, error) {
+				db := db.Connect()
+				defer db.Close()
+				var folder models.Folder
+
+				idQuery, _ := params.Args["id"].(string)
+				db.First(&folder, idQuery)
+				db.Model(&folder).Related(&folder.Notes)
+				fmt.Println("len(folder.Notes):", len(folder.Notes))
+
+				return folder.Notes, nil
+			},
+		},
+
 	},
 })
 
@@ -210,7 +233,6 @@ var rootMutation = graphql.NewObject(graphql.ObjectConfig{
 					Name: params.Args["name"].(string),
 				}
 				db.Create(&folder)
-				fmt.Println("createFolder folder:", folder)
 
 				return folder, nil
 			},

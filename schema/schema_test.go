@@ -20,18 +20,6 @@ func init() {
 		models.CreateTables(ldb)
 	}
 
-	note := models.Note{
-		Name: "09-29-2017",
-		Content: "##To Do:\n* [ ] Stuff\n* [ ] More stuff\n* [ ] Other things",
-	}
-	n := models.Note{
-		Name: "10-01-2017",
-		Content: "##To Do:\n* [ ] Many Things\n* [ ] More things\n* [ ] Other stuff",
-	}
-	ldb.Create(&note)
-	ldb.Create(&n)
-	noteID = note.ID
-
 	folder := models.Folder{
 		Name: "Ideas",
 	}
@@ -41,10 +29,25 @@ func init() {
 	}
 	ldb.Create(&f)
 	folderID = folder.ID
+
+	note := models.Note{
+		Name: "09-29-2017",
+		Content: "##To Do:\n* [ ] Stuff\n* [ ] More stuff\n* [ ] Other things",
+		FolderID: folder.ID,
+	}
+	n := models.Note{
+		Name: "10-01-2017",
+		Content: "##To Do:\n* [ ] Many Things\n* [ ] More things\n* [ ] Other stuff",
+	}
+	ldb.Create(&note)
+	ldb.Create(&n)
+
+	fmt.Println("note.FolderID:", note.FolderID)
+	noteID = note.ID
 }
 
 func cleanTables() {
-	if (testCount == 10) {
+	if (testCount == 11) {
 		ldb.Unscoped().Delete(models.Note{})
 		ldb.Unscoped().Delete(models.Folder{})
 	}
@@ -193,6 +196,21 @@ func TestGraphQLDeleteFolder(t *testing.T) {
 
 	if (folder["id"] == "") {
 		t.Errorf("Expected folder[id] to be '' but it is %v", folder["id"])
+	}
+
+	testCount++
+	cleanTables()
+}
+
+func TestGraphQLQueryFolderNotes(t *testing.T) {
+	query := fmt.Sprintf(`{folderNotes(id: "%v"){id, name, content}}`, folderID)
+	result := ExecuteQuery(query, Schema)
+
+	resMap := result.Data.(map[string]interface{})
+	notes := resMap["folderNotes"].([]interface{})
+
+	if (len(notes) != 2) {
+		t.Errorf("Expected len(notes) to be 1 but it is %v", len(notes))
 	}
 
 	testCount++
