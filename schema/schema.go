@@ -92,6 +92,40 @@ var RootQuery = graphql.NewObject(graphql.ObjectConfig{
 				return notes, nil
 			},
 		},
+
+		"folders": &graphql.Field{
+			Type:        graphql.NewList(folderType),
+			Description: "List of folders.",
+			Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+				db := db.Connect()
+				defer db.Close()
+
+				var folders []models.Folder
+				db.Find(&folders);
+
+				return folders, nil
+			},
+		},
+
+		"folder": &graphql.Field{
+			Type:        folderType,
+			Description: "Get single folder",
+			Args: graphql.FieldConfigArgument{
+				"id": &graphql.ArgumentConfig{
+					Type: graphql.String,
+				},
+			},
+			Resolve: func(params graphql.ResolveParams) (interface{}, error) {
+				db := db.Connect()
+				defer db.Close()
+				var folder models.Folder
+
+				idQuery, _ := params.Args["id"].(string)
+				db.First(&folder, idQuery)
+
+				return folder, nil
+			},
+		},
 	},
 })
 

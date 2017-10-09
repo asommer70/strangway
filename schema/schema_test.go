@@ -11,6 +11,7 @@ import (
 
 var ldb *gorm.DB
 var noteID uint
+var folderID uint
 var testCount int
 
 func init() {
@@ -29,13 +30,23 @@ func init() {
 	}
 	ldb.Create(&note)
 	ldb.Create(&n)
-
 	noteID = note.ID
+
+	folder := models.Folder{
+		Name: "Ideas",
+	}
+	ldb.Create(&folder)
+	f := models.Folder{
+		Name: "Main",
+	}
+	ldb.Create(&f)
+	folderID = folder.ID
 }
 
-func cleanNotesTable() {
-	if (testCount == 5) {
+func cleanTables() {
+	if (testCount == 7) {
 		ldb.Unscoped().Delete(models.Note{})
+		ldb.Unscoped().Delete(models.Folder{})
 	}
 }
 
@@ -51,7 +62,7 @@ func TestGraphQLQueryNotes(t *testing.T) {
 	}
 
 	testCount++
-	cleanNotesTable()
+	cleanTables()
 }
 
 func TestGraphQLQueryOneNote(t *testing.T) {
@@ -66,7 +77,7 @@ func TestGraphQLQueryOneNote(t *testing.T) {
 	}
 
 	testCount++
-	cleanNotesTable()
+	cleanTables()
 }
 
 func TestGraphQLCreateNote(t *testing.T) {
@@ -81,7 +92,7 @@ func TestGraphQLCreateNote(t *testing.T) {
 	}
 
 	testCount++
-	cleanNotesTable()
+	cleanTables()
 }
 
 func TestGraphQLUpdateNote(t *testing.T) {
@@ -96,7 +107,7 @@ func TestGraphQLUpdateNote(t *testing.T) {
 	}
 
 	testCount++
-	cleanNotesTable()
+	cleanTables()
 }
 
 func TestGraphQLDeleteNote(t *testing.T) {
@@ -111,5 +122,34 @@ func TestGraphQLDeleteNote(t *testing.T) {
 	}
 
 	testCount++
-	cleanNotesTable()
+	cleanTables()
+}
+
+func TestGraphQLQueryOneFolder(t *testing.T) {
+	query := fmt.Sprintf(`{folder(id: "%v"){id, name}}`, folderID)
+	result := ExecuteQuery(query, Schema)
+
+	resMap := result.Data.(map[string]interface{})
+	folder := resMap["folder"].(map[string]interface{})
+
+	if (folder["name"] != "Ideas") {
+		t.Errorf("Expected folder[name] to be 'Ideas' but it is %v", folder["name"])
+	}
+
+	testCount++
+	cleanTables()
+}
+
+func TestGraphQLQueryFolders(t *testing.T) {
+	result := ExecuteQuery("{folders{id, name}}", Schema)
+
+	resMap := result.Data.(map[string]interface{})
+	folders := resMap["folders"].([]interface{})
+
+	if (len(folders) != 2) {
+		t.Errorf("Expected len(folders) to be 2 but it is %v", len(folders))
+	}
+
+	testCount++
+	cleanTables()
 }
