@@ -95,9 +95,77 @@ var RootQuery = graphql.NewObject(graphql.ObjectConfig{
 	},
 })
 
+var rootMutation = graphql.NewObject(graphql.ObjectConfig{
+	Name: "RootMutation",
+	Fields: graphql.Fields{
+		"createNote": &graphql.Field{
+			Type: noteType,
+			Args: graphql.FieldConfigArgument{
+				"name": &graphql.ArgumentConfig{Type: graphql.NewNonNull(graphql.String)},
+				"content": &graphql.ArgumentConfig{Type: graphql.NewNonNull(graphql.String)},
+			},
+			Resolve: func(params graphql.ResolveParams) (interface{}, error) {
+				db := db.Connect()
+				defer db.Close()
+
+				note := models.Note{
+					Name: params.Args["name"].(string),
+					Content: params.Args["content"].(string),
+				}
+				db.Create(&note)
+
+				fmt.Println("note:", note)
+
+				return note, nil
+			},
+
+		},
+		"updateNote": &graphql.Field{
+			Type: noteType,
+			Args: graphql.FieldConfigArgument{
+				"noteId":  &graphql.ArgumentConfig{Type: graphql.NewNonNull(graphql.String)},
+				"name": &graphql.ArgumentConfig{Type: graphql.NewNonNull(graphql.String)},
+				"content": &graphql.ArgumentConfig{Type: graphql.NewNonNull(graphql.String)},
+			},
+			Resolve: func(params graphql.ResolveParams) (interface{}, error) {
+				db := db.Connect()
+				defer db.Close()
+
+				var note models.Note
+				db.First(&note, params.Args["name"].(string))
+
+				note.Name = params.Args["name"].(string)
+				note.Content = params.Args["content"].(string)
+
+				db.Save(&note)
+
+				return note, nil
+			},
+		},
+		"deleteNote": &graphql.Field{
+			Type: noteType,
+			Args: graphql.FieldConfigArgument{
+				"noteId":  &graphql.ArgumentConfig{Type: graphql.NewNonNull(graphql.String)},
+			},
+			Resolve: func(params graphql.ResolveParams) (interface{}, error) {
+				db := db.Connect()
+				defer db.Close()
+
+				var note models.Note
+				db.First(&note, params.Args["name"].(string))
+
+				db.Delete(&note)
+
+				return  note, nil
+			},
+		},
+	},
+})
+
 // Schema ... define schema, with our rootQuery and rootMutation.
 var Schema, _ = graphql.NewSchema(graphql.SchemaConfig{
 	Query:    RootQuery,
+	Mutation: rootMutation,
 })
 
 // ExecuteQuery ... make the actual query to GraphQL.
@@ -110,6 +178,6 @@ func ExecuteQuery(query string, schema graphql.Schema) *graphql.Result {
 		fmt.Printf("wrong result, unexpected errors: %v", result.Errors)
 	}
 
-	fmt.Println("ExecuteQuery result.Data:", result.Data)
+	//fmt.Println("ExecuteQuery result.Data:", result.Data)
 	return result
 }

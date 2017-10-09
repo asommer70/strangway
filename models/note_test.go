@@ -36,6 +36,25 @@ func TestCreateDeleteNote(t *testing.T) {
 	}
 }
 
+func TestUpdateNote(t *testing.T) {
+	note := Note{
+		Name: "09-29-2017",
+		Content: "##To Do:\n* [ ] Stuff\n* [ ] More stuff\n* [ ] Other things",
+	}
+	ldb.Create(&note)
+
+	note.Name = "10-09-2017"
+	ldb.Save(&note)
+
+	var nt Note
+	ldb.First(&nt, note.ID)
+
+	if (nt.Name != "10-09-2017") {
+		t.Errorf("Expected nt.Name to be '10-09-2017' but it is %v", nt.Name)
+	}
+	ldb.Delete(&nt)
+}
+
 func TestFindAllNotes(t *testing.T) {
 	note := Note{
 		Name: "09-29-2017",

@@ -34,7 +34,9 @@ func init() {
 }
 
 func cleanNotesTable() {
-	ldb.Unscoped().Delete(models.Note{})
+	if (testCount == 4) {
+		ldb.Unscoped().Delete(models.Note{})
+	}
 }
 
 
@@ -49,9 +51,7 @@ func TestGraphQLQueryNotes(t *testing.T) {
 	}
 
 	testCount++
-	if (testCount == 2) {
-		cleanNotesTable()
-	}
+	cleanNotesTable()
 }
 
 func TestGraphQLQueryOneNote(t *testing.T) {
@@ -66,7 +66,22 @@ func TestGraphQLQueryOneNote(t *testing.T) {
 	}
 
 	testCount++
-	if (testCount == 2) {
-		cleanNotesTable()
+	cleanNotesTable()
+}
+
+func TestGraphQLCreateNote(t *testing.T) {
+	query := fmt.Sprintf(`mutation {note: createNote(name: "%v", content: "%v"){id, name, content}}`, "10-09-2017", "Woo creating?")
+	fmt.Println("query:", query)
+	result := ExecuteQuery(query, Schema)
+
+	fmt.Println("result:", result);
+	resMap := result.Data.(map[string]interface{})
+	note := resMap["note"].(map[string]interface{})
+
+	if (note["name"] != "10-09-2017") {
+		t.Errorf("Expected note[name] to be '10-09-2017' but it is %v", note["name"])
 	}
+
+	testCount++
+	cleanNotesTable()
 }
