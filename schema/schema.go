@@ -149,14 +149,14 @@ var rootMutation = graphql.NewObject(graphql.ObjectConfig{
 		"deleteNote": &graphql.Field{
 			Type: noteType,
 			Args: graphql.FieldConfigArgument{
-				"noteId":  &graphql.ArgumentConfig{Type: graphql.NewNonNull(graphql.String)},
+				"id":  &graphql.ArgumentConfig{Type: graphql.NewNonNull(graphql.String)},
 			},
 			Resolve: func(params graphql.ResolveParams) (interface{}, error) {
 				db := db.Connect()
 				defer db.Close()
 
 				var note models.Note
-				db.First(&note, params.Args["name"].(string))
+				db.First(&note, params.Args["id"].(string))
 
 				db.Delete(&note)
 

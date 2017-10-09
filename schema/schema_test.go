@@ -98,3 +98,18 @@ func TestGraphQLUpdateNote(t *testing.T) {
 	testCount++
 	cleanNotesTable()
 }
+
+func TestGraphQLDeleteNote(t *testing.T) {
+	query := fmt.Sprintf(`mutation {note: deleteNote(id: "%v"){id}}`, noteID)
+	result := ExecuteQuery(query, Schema)
+
+	resMap := result.Data.(map[string]interface{})
+	note := resMap["note"].(map[string]interface{})
+
+	if (note["id"] == "") {
+		t.Errorf("Expected note[id] to be '' but it is %v", note["id"])
+	}
+
+	testCount++
+	cleanNotesTable()
+}
