@@ -197,6 +197,65 @@ var rootMutation = graphql.NewObject(graphql.ObjectConfig{
 				return  note, nil
 			},
 		},
+		"createFolder": &graphql.Field{
+			Type: folderType,
+			Args: graphql.FieldConfigArgument{
+				"name": &graphql.ArgumentConfig{Type: graphql.NewNonNull(graphql.String)},
+			},
+			Resolve: func(params graphql.ResolveParams) (interface{}, error) {
+				db := db.Connect()
+				defer db.Close()
+
+				folder := models.Folder{
+					Name: params.Args["name"].(string),
+				}
+				db.Create(&folder)
+				fmt.Println("createFolder folder:", folder)
+
+				return folder, nil
+			},
+
+		},
+		"updateFolder": &graphql.Field{
+			Type: folderType,
+			Args: graphql.FieldConfigArgument{
+				"id":  &graphql.ArgumentConfig{Type: graphql.NewNonNull(graphql.String)},
+				"name": &graphql.ArgumentConfig{Type: graphql.NewNonNull(graphql.String)},
+			},
+			Resolve: func(params graphql.ResolveParams) (interface{}, error) {
+				db := db.Connect()
+				defer db.Close()
+
+				var folder models.Folder
+				db.First(&folder, params.Args["id"].(string))
+
+				name := params.Args["name"].(string)
+				if (name != "") {
+					folder.Name = name
+				}
+
+				db.Save(&folder)
+
+				return folder, nil
+			},
+		},
+		"deleteFolder": &graphql.Field{
+			Type: folderType,
+			Args: graphql.FieldConfigArgument{
+				"id":  &graphql.ArgumentConfig{Type: graphql.NewNonNull(graphql.String)},
+			},
+			Resolve: func(params graphql.ResolveParams) (interface{}, error) {
+				db := db.Connect()
+				defer db.Close()
+
+				var folder models.Folder
+				db.First(&folder, params.Args["id"].(string))
+
+				db.Delete(&folder)
+
+				return  folder, nil
+			},
+		},
 	},
 })
 

@@ -44,7 +44,7 @@ func init() {
 }
 
 func cleanTables() {
-	if (testCount == 7) {
+	if (testCount == 10) {
 		ldb.Unscoped().Delete(models.Note{})
 		ldb.Unscoped().Delete(models.Folder{})
 	}
@@ -148,6 +148,51 @@ func TestGraphQLQueryFolders(t *testing.T) {
 
 	if (len(folders) != 2) {
 		t.Errorf("Expected len(folders) to be 2 but it is %v", len(folders))
+	}
+
+	testCount++
+	cleanTables()
+}
+
+func TestGraphQLCreateFolder(t *testing.T) {
+	query := fmt.Sprintf(`mutation {folder: createFolder(name: "%v"){id, name}}`, "Stuff")
+	result := ExecuteQuery(query, Schema)
+
+	resMap := result.Data.(map[string]interface{})
+	folder := resMap["folder"].(map[string]interface{})
+
+	if (folder["name"] != "Stuff") {
+		t.Errorf("Expected note[name] to be 'Stuff' but it is %v", folder["name"])
+	}
+
+	testCount++
+	cleanTables()
+}
+
+func TestGraphQLUpdateFolder(t *testing.T) {
+	query := fmt.Sprintf(`mutation {folder: updateFolder(id: "%v", name: "%v"){id, name}}`, folderID, "Chalkers Folder")
+	result := ExecuteQuery(query, Schema)
+
+	resMap := result.Data.(map[string]interface{})
+	folder := resMap["folder"].(map[string]interface{})
+
+	if (folder["name"] != "Chalkers Folder") {
+		t.Errorf("Expected folder[name] to be 'Chalkers Folder' but it is %v", folder["name"])
+	}
+
+	testCount++
+	cleanTables()
+}
+
+func TestGraphQLDeleteFolder(t *testing.T) {
+	query := fmt.Sprintf(`mutation {folder: deleteFolder(id: "%v"){id}}`, folderID)
+	result := ExecuteQuery(query, Schema)
+
+	resMap := result.Data.(map[string]interface{})
+	folder := resMap["folder"].(map[string]interface{})
+
+	if (folder["id"] == "") {
+		t.Errorf("Expected folder[id] to be '' but it is %v", folder["id"])
 	}
 
 	testCount++
