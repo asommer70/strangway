@@ -114,8 +114,6 @@ var rootMutation = graphql.NewObject(graphql.ObjectConfig{
 				}
 				db.Create(&note)
 
-				fmt.Println("note:", note)
-
 				return note, nil
 			},
 
@@ -123,7 +121,7 @@ var rootMutation = graphql.NewObject(graphql.ObjectConfig{
 		"updateNote": &graphql.Field{
 			Type: noteType,
 			Args: graphql.FieldConfigArgument{
-				"noteId":  &graphql.ArgumentConfig{Type: graphql.NewNonNull(graphql.String)},
+				"id":  &graphql.ArgumentConfig{Type: graphql.NewNonNull(graphql.String)},
 				"name": &graphql.ArgumentConfig{Type: graphql.NewNonNull(graphql.String)},
 				"content": &graphql.ArgumentConfig{Type: graphql.NewNonNull(graphql.String)},
 			},
@@ -132,10 +130,16 @@ var rootMutation = graphql.NewObject(graphql.ObjectConfig{
 				defer db.Close()
 
 				var note models.Note
-				db.First(&note, params.Args["name"].(string))
+				db.First(&note, params.Args["id"].(string))
 
-				note.Name = params.Args["name"].(string)
-				note.Content = params.Args["content"].(string)
+				name := params.Args["name"].(string)
+				if (name != "") {
+					note.Name = name
+				}
+				content := params.Args["content"].(string)
+				if (content != "") {
+					note.Content = content
+				}
 
 				db.Save(&note)
 
