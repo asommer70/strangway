@@ -1,11 +1,26 @@
 package db
 
 import (
-"github.com/jinzhu/gorm"
-_ "github.com/jinzhu/gorm/dialects/postgres"
-"log"
-"flag"
+	"github.com/jinzhu/gorm"
+	_ "github.com/jinzhu/gorm/dialects/postgres"
+	"log"
+	"flag"
+	"os"
 )
+
+type DbConfig struct {
+	Database string
+	Host     string
+	Username string
+	Password string
+}
+
+type Configuration struct {
+	Port string
+	Test DbConfig
+	Dev DbConfig
+	Pro DbConfig
+}
 
 func Connect() *gorm.DB {
 	var err error
@@ -13,9 +28,9 @@ func Connect() *gorm.DB {
 
 	// TODO:as use config file to get database information.
 	if flag.Lookup("test.v") != nil {
-		db, err = gorm.Open("postgres", "host=localhost user=strang dbname=strangway_test sslmode=disable password=things")
+		db, err = gorm.Open("postgres", os.Getenv("TESTCONSTR"))
 	} else {
-		db, err = gorm.Open("postgres", "host=localhost user=strang dbname=strangway_dev sslmode=disable password=things")
+		db, err = gorm.Open("postgres", os.Getenv("DEVCONSTR"))
 	}
 	Check(err, "gorm.Open")
 
