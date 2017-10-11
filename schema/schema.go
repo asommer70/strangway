@@ -17,7 +17,7 @@ var noteType = graphql.NewObject(graphql.ObjectConfig{
 			Type: graphql.String,
 		},
 		"content": &graphql.Field{
-			Type: graphql.Boolean,
+			Type: graphql.String,
 		},
 		"createdAt": &graphql.Field{
 			Type: graphql.DateTime,
@@ -143,7 +143,6 @@ var RootQuery = graphql.NewObject(graphql.ObjectConfig{
 				idQuery, _ := params.Args["id"].(string)
 				db.First(&folder, idQuery)
 				db.Model(&folder).Related(&folder.Notes)
-				fmt.Println("len(folder.Notes):", len(folder.Notes))
 
 				return folder.Notes, nil
 			},
@@ -173,7 +172,6 @@ var rootMutation = graphql.NewObject(graphql.ObjectConfig{
 
 				return note, nil
 			},
-
 		},
 		"updateNote": &graphql.Field{
 			Type: noteType,
@@ -297,6 +295,5 @@ func ExecuteQuery(query string, schema graphql.Schema) *graphql.Result {
 		fmt.Printf("wrong result, unexpected errors: %v", result.Errors)
 	}
 
-	//fmt.Println("ExecuteQuery result.Data:", result.Data)
 	return result
 }

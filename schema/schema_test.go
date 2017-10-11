@@ -90,8 +90,8 @@ func TestGraphQLCreateNote(t *testing.T) {
 	resMap := result.Data.(map[string]interface{})
 	note := resMap["note"].(map[string]interface{})
 
-	if (note["name"] != "10-09-2017") {
-		t.Errorf("Expected note[name] to be '10-09-2017' but it is %v", note["name"])
+	if (note["content"] != "Woo creating?") {
+		t.Errorf("Expected note[content] to be 'Woo creating?' but it is %v", note["content"])
 	}
 
 	testCount++
