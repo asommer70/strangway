@@ -18,18 +18,13 @@ func init() {
 
 func main() {
 	log.Println("Executing Strangway!...")
-	//config := db.GetConfig();
-	//db := db.Connect()
-	//nc := controllers.NewNoteController(db)
 
 	router := httprouter.New()
 	router.GET("/", Index)
 	router.GET("/:query", Query)
-	//router.ServeFiles("/assets/*filepath", http.Dir("./assets/"))
 
-	// TODO:as adjust port to use config file.
 	log.Println("Listening on port: ", os.Getenv("PORT"))
-	http.ListenAndServe("localhost:" + os.Getenv("PORT"), router)
+	http.ListenAndServeTLS("localhost:" + os.Getenv("PORT"), "./ssl/cert3.pem", "./ssl/privkey3.pem", router)
 }
 
 func Index(res http.ResponseWriter, req *http.Request, params httprouter.Params) {

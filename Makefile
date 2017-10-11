@@ -11,6 +11,7 @@ BINARY_UNIX=$(BINARY_NAME)_unix
 
 # Environment variables change them for your system.
 export PORT = 3000
+export SSLPORT = 4430
 export TESTCONSTR = host=localhost user=strang dbname=strangway_test sslmode=disable password=things
 export DEVCONSTR = host=localhost user=strang dbname=strangway_dev sslmode=disable password=things
 export PROCONSTR = host=localhost user=strang dbname=strangway sslmode=disable password=things
