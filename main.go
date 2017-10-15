@@ -22,6 +22,7 @@ func main() {
 	router := httprouter.New()
 	router.GET("/", Index)
 	router.GET("/graphql/:query", Query)
+	router.POST("/graphql/:query", Query)
 
 	log.Println("Listening on port: ", os.Getenv("SSLPORT"))
 	http.ListenAndServeTLS("localhost:" + os.Getenv("SSLPORT"), "./ssl/cert3.pem", "./ssl/privkey3.pem", router)
