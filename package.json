@@ -5,7 +5,10 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon index.js"
+    "start": "ENV=dev nodemon index.js",
+    "db:create": "./bin/create_databases.sh",
+    "db:migrate:create": "./bin/create_migration.sh",
+    "db:migrate": "for i in $(ls migrations/*.sql); do psql strangway_dev < $i; done;"
   },
   "repository": {
     "type": "git",
