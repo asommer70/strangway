@@ -1,5 +1,9 @@
 -- Migration created: Fri Oct 27 11:25:56 EDT 2017
 
-alter table notes add constraint if not exists belongsToFolder foreign key (folderId) references folders (id);
-
--- ALTER TABLE distributors ADD CONSTRAINT distfk FOREIGN KEY (address) REFERENCES addresses (address);
+DO $$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'belongstofolder') THEN
+    alter table notes add constraint belongstofolder foreign key (folderId) references folders (id);
+  END IF;
+END;
+$$;
