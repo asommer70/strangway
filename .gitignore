@@ -3,6 +3,7 @@
 *.swo
 
 .idea/
+.env
 
 dist/
 node_modules/
