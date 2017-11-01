@@ -15,4 +15,24 @@ describe('Folder', () => {
         });
     });
   });
+
+  describe('findById', () => {
+    let mainId;
+
+    before((done) => {
+      Folder.create('Main').then((folder) => {
+        mainId = folder.id;
+        done();
+      });
+    });
+
+    it('should return a folder based on an id number', (done) => {
+      Folder.findById(mainId)
+        .then((folder) => {
+          assert.equal(folder.name, 'Main');
+          folder.delete();
+          done();
+        });
+    });
+  });
 });
