@@ -1,4 +1,4 @@
-const db = require('./index');
+const DB = require('./index');
 
 module.exports = () => {
   const folder = {
@@ -8,10 +8,11 @@ module.exports = () => {
     updatedAt: undefined,
 
     delete: () => {
+      const db = DB.con();
       db.query(`delete from folders where id = ${folder.id}`)
-        // .then((res) => {
-        //   db.end();
-        // });
+        .then((res) => {
+          db.end();
+        });
     },
   }
 
@@ -29,6 +30,8 @@ module.exports = () => {
           new Date(),
         ]
       }
+      // db.start();
+      const db = DB.con();
 
       return db.query(query)
         .then((res) => {
@@ -37,6 +40,7 @@ module.exports = () => {
           folder.createdAt = res.rows[0].createdat;
           folder.updatedAt = res.rows[0].updatedat;
 
+          db.end();
           return folder;
         })
         .catch(e => console.error(e.stack));
@@ -47,6 +51,8 @@ module.exports = () => {
         text: `select * from folders where id = $1;`,
         values: [id]
       }
+      // db.start();
+      const db = DB.con();
 
       return db.query(query)
         .then((res) => {
@@ -55,6 +61,7 @@ module.exports = () => {
           folder.createdAt = res.rows[0].createdat;
           folder.updatedAt = res.rows[0].updatedat;
 
+          db.end();
           return folder;
         })
         .catch(e => console.error(e.stack));
