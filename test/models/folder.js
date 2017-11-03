@@ -36,7 +36,7 @@ describe('Folder', () => {
     });
   });
 
-  describe.only('findAll', () => {
+  describe('findAll', () => {
     let thingsId;
     let otherId
 
@@ -56,7 +56,7 @@ describe('Folder', () => {
           assert.equal(folders.length, 2);
 
           folders.forEach((folder) => {
-            folder.delete()
+            folder.delete();
           });
           done();
         });
