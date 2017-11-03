@@ -1,26 +1,37 @@
 const DB = require('./index');
 
-module.exports = () => {
-  const folder = {
-    id: undefined,
-    name: undefined,
-    createdAt: undefined,
-    updatedAt: undefined,
+var Folder = function(attrs) {
+    this.id = attrs.id;
+    this.name = attrs.name;
+    this.createdAt = attrs.createdat;
+    this.updatedAt = attrs.updatedat;
 
-    delete: () => {
+    this.delete = () => {
       const db = DB.con();
-      db.query(`delete from folders where id = ${folder.id}`)
+      return db.query(`delete from folders where id = ${this.id}`)
         .then((res) => {
           db.end();
         });
-    },
-  }
+    }
 
+    this.save = () => {
+      const db = DB.con();
+      const query = {
+        text: `update folders set name = $1, updatedat = $2 where id = $3;`,
+        values: [this.name, this.updatedAt, this.id]
+      }
+
+      return db.query(query)
+        .then((res) => {
+          db.end();
+          return this;
+        })
+        .catch(e => console.error(e.stack));
+    }
+}
+
+module.exports = () => {
   return {
-    // findAll: () => crud.findAll(),
-    // update: (attrs) => crud.update(attrs),
-    // delete: (id) => crud.delete(id),
-
     create: (name) => {
       const query = {
         text: `INSERT INTO folders (name, createdAt, updatedAt) values ($1, $2, $3) RETURNING *;`,
@@ -30,16 +41,11 @@ module.exports = () => {
           new Date(),
         ]
       }
-      // db.start();
       const db = DB.con();
 
       return db.query(query)
         .then((res) => {
-          folder.id = res.rows[0].id;
-          folder.name = res.rows[0].name;
-          folder.createdAt = res.rows[0].createdat;
-          folder.updatedAt = res.rows[0].updatedat;
-
+          const folder = new Folder(res.rows[0]);
           db.end();
           return folder;
         })
@@ -51,18 +57,31 @@ module.exports = () => {
         text: `select * from folders where id = $1;`,
         values: [id]
       }
-      // db.start();
       const db = DB.con();
 
       return db.query(query)
         .then((res) => {
-          folder.id = res.rows[0].id;
-          folder.name = res.rows[0].name;
-          folder.createdAt = res.rows[0].createdat;
-          folder.updatedAt = res.rows[0].updatedat;
-
+          const folder = new Folder(res.rows[0]);
           db.end();
           return folder;
+        })
+        .catch(e => console.error(e.stack));
+    },
+
+    findAll: () => {
+      const db = DB.con();
+
+      return db.query(`select * from folders;`)
+        .then((res) => {
+          db.end();
+
+          // Add the save and delete methods.
+          const folders = [];
+          res.rows.forEach((row) => {
+            folders.push(new Folder(row));
+          });
+
+          return folders;
         })
         .catch(e => console.error(e.stack));
     },
