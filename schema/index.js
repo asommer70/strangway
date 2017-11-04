@@ -53,6 +53,17 @@ const RootQuery = new GraphQLObjectType({
           });
       }
     },
+
+    folders: {
+      type: new GraphQLList(FolderType),
+      resolve(parentValue, args) {
+        return Folder.findAll()
+          .then((folders) => {
+            return folders;
+          });
+      }
+    },
+
     note: {
       type: NoteType,
       args: { id: { type: GraphQLInt } },
@@ -62,7 +73,17 @@ const RootQuery = new GraphQLObjectType({
             return note;
           });
       }
-    }
+    },
+
+    notes: {
+      type: new GraphQLList(NoteType),
+      resolve(parentValue, args) {
+        return Note.findAll()
+          .then((notes) => {
+            return notes;
+          });
+      }
+    },
   }
 });
 
