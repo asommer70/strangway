@@ -4,7 +4,8 @@ const {
   GraphQLString,
   GraphQLInt,
   GraphQLList,
-  GraphQLSchema
+  GraphQLSchema,
+  GraphQLNonNull
 } = graphql;
 const Folder = new require('../models/folder')();
 const Note = new require('../models/note')();
@@ -87,6 +88,50 @@ const RootQuery = new GraphQLObjectType({
   }
 });
 
+const mutation = new GraphQLObjectType({
+  name: 'Mutation',
+  fields: {
+    addFolder: {
+      type: FolderType,
+      args: {
+        name: { type: new GraphQLNonNull(GraphQLString) },
+      },
+      resolve(parentValue, args) {
+        return Folder.create(args.name)
+      }
+    },
+
+    deleteFolder: {
+      type: FolderType,
+      args: {
+        id: { type: new GraphQLNonNull(GraphQLInt) }
+      },
+      resolve(parentValue, args) {
+        return Folder.findById(args.id)
+          .then((folder) => {
+            return folder.delete();
+          })
+      }
+    },
+
+    editFolder: {
+      type: FolderType,
+      args: {
+        id: { type: new GraphQLNonNull(GraphQLInt) },
+        name: { type: new GraphQLNonNull(GraphQLString) }
+      },
+      resolve(parentValue, args) {
+        return Folder.findById(args.id)
+          .then((folder) => {
+            folder.name = args.name;
+            return folder.save();
+          });
+      }
+    }
+  }
+});
+
 module.exports = new GraphQLSchema({
-  query: RootQuery
+  query: RootQuery,
+  mutation
 });
