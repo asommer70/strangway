@@ -3,6 +3,7 @@ const {
   GraphQLObjectType,
   GraphQLString,
   GraphQLInt,
+  GraphQLList,
   GraphQLSchema
 } = graphql;
 const Folder = new require('../models/folder')();
@@ -10,12 +11,21 @@ const Note = new require('../models/note')();
 
 const FolderType = new GraphQLObjectType({
   name: 'Folder',
-  fields: {
+  fields: () => ({
     id: { type: GraphQLInt },
     name: { type: GraphQLString },
     createdAt: { type: GraphQLString },
-    updatedAt: { type: GraphQLString }
-  }
+    updatedAt: { type: GraphQLString },
+    notes: {
+      type: new GraphQLList(NoteType),
+      resolve(parentValue, args) {
+        return parentValue.notes()
+          .then((notes) => {
+            return notes;
+          });
+      }
+    }
+  })
 });
 
 const NoteType = new GraphQLObjectType({
