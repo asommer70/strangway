@@ -34,6 +34,8 @@ var Note = function(attrs) {
 
 module.exports = () => {
   return {
+    note: Note,
+
     create: (attrs) => {
       const query = {
         text: `INSERT INTO notes (name, content, folderid, createdAt, updatedAt) values ($1, $2, $3, $4, $5) RETURNING *;`,

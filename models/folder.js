@@ -1,5 +1,7 @@
 const DB = require('./index');
 
+const Note = new require('./note')();
+
 var Folder = function(attrs) {
     this.id = attrs.id;
     this.name = attrs.name;
@@ -25,6 +27,28 @@ var Folder = function(attrs) {
         .then((res) => {
           db.end();
           return this;
+        })
+        .catch(e => console.error(e.stack));
+    }
+
+    this.notes = () => {
+      const db = DB.con();
+      const query = {
+        text: `select * from notes where folderId = $1`,
+        values: [this.id]
+      }
+
+      return db.query(query)
+        .then((res) => {
+          db.end();
+
+          // Add the save and delete methods.
+          const notes = [];
+          res.rows.forEach((row) => {
+            notes.push(new Note.note(row));
+          });
+
+          return notes;
         })
         .catch(e => console.error(e.stack));
     }

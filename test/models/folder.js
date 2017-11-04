@@ -2,6 +2,7 @@ const assert = require('assert');
 const should = require('chai').should();
 
 const Folder = new require('../../models/folder')();
+const Note = new require('../../models/note')();
 
 describe('Folder', () => {
   describe('create and delete', () => {
@@ -76,6 +77,54 @@ describe('Folder', () => {
                   folder.delete();
                   done();
                 });
+            })
+        });
+    });
+  });
+
+  describe('a folder has many notes', () => {
+    let mainId;
+    let thingsId;
+    let otherId;
+
+    before((done) => {
+      Folder.create('Main').then((folder) => {
+        mainId = folder.id;
+        Note.create({name: 'Things', content: "# Need Some Things\n\nwhat what", folderId: mainId}).then((note) => {
+          thingsId = note.id;
+          Note.create({name: 'Other', content: "# Need Some Other Stuff\n\nwhat what what", folderId: mainId})
+            .then((note) => {
+              otherId = note.id;
+              done();
+            });
+        });
+      });
+    });
+
+    after((done) => {
+      Note.findAll()
+        .then((notes) => {
+          notes[0].delete()
+            .then(() => {
+              notes[1].delete()
+                .then(() => {
+                  Folder.findById(mainId)
+                    .then((folder) =>{
+                      folder.delete();
+                      done();
+                    });
+                });
+            });
+        });
+    });
+
+    it('should have two notes', (done) => {
+      Folder.findById(mainId)
+        .then((folder) => {
+          folder.notes()
+            .then((notes) => {
+              assert.equal(notes.length, 2);
+              done();
             })
         });
     });

@@ -1,8 +1,6 @@
 const { Client } = require('pg');
 require('dotenv').config();
 
-console.log('process.env.OBJ:', process.env.OBJ);
-
 module.exports = {
   con: () => {
     let db;
