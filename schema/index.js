@@ -127,6 +127,50 @@ const mutation = new GraphQLObjectType({
             return folder.save();
           });
       }
+    },
+
+    addNote: {
+      type: NoteType,
+      args: {
+        name: { type: new GraphQLNonNull(GraphQLString) },
+        content: { type: GraphQLString },
+        folderId: { type: GraphQLInt }
+      },
+      resolve(parentValue, args) {
+        return Note.create({name: args.name, content: args.content, folderId: args.folderId})
+      }
+    },
+
+    deleteNote: {
+      type: NoteType,
+      args: {
+        id: { type: new GraphQLNonNull(GraphQLInt) }
+      },
+      resolve(parentValue, args) {
+        return Note.findById(args.id)
+          .then((note) => {
+            return note.delete();
+          })
+      }
+    },
+
+    editNote: {
+      type: NoteType,
+      args: {
+        id: { type: new GraphQLNonNull(GraphQLInt) },
+        name: { type: GraphQLString },
+        content: { type: GraphQLString },
+        folderId: { type: GraphQLInt }
+      },
+      resolve(parentValue, args) {
+        return Note.findById(args.id)
+          .then((note) => {
+            note.name = (args.name != null) ? args.name : note.name;
+            note.content = (args.content != null) ? args.content : note.content;
+            note.folderId = (args.folderId != null) ? args.folderId : note.folderId;
+            return note.save();
+          });
+      }
     }
   }
 });
