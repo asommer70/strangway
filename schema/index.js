@@ -37,7 +37,16 @@ const NoteType = new GraphQLObjectType({
     content: { type: GraphQLString },
     folderId: { type: GraphQLInt },
     createdAt: { type: GraphQLString },
-    updatedAt: { type: GraphQLString }
+    updatedAt: { type: GraphQLString },
+    folder: {
+      type: FolderType,
+      resolve(parentValue, args) {
+        return Folder.findById(parentValue.folderId)
+          .then((folder) => {
+            return folder;
+          });
+      }
+    }
   }
 });
 
