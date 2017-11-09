@@ -20,7 +20,7 @@ var Note = function(attrs) {
       const db = DB.con();
       const query = {
         text: `update notes set name = $1, content = $2, folderid = $3, updatedat = $4 where id = $5;`,
-        values: [this.name, this.content, this.folderId, this.updatedAt, this.id]
+        values: [this.name, this.content, this.folderId, new Date(), this.id]
       }
 
       return db.query(query)
@@ -77,7 +77,7 @@ module.exports = () => {
     findAll: () => {
       const db = DB.con();
 
-      return db.query(`select * from notes;`)
+      return db.query(`select * from notes order by updatedat desc;`)
         .then((res) => {
           db.end();
 
