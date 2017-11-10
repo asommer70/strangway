@@ -34,7 +34,7 @@ var Folder = function(attrs) {
     this.notes = () => {
       const db = DB.con();
       const query = {
-        text: `select * from notes where folderId = $1 order by notes.updatedat desc;`,
+        text: `select *, to_char(updatedat, 'MM-DD-YYYY HH:MI:SS') as updatedat from notes where folderId = $1 order by notes.updatedat desc;`,
         values: [this.id]
       }
 
