@@ -9,6 +9,9 @@ const {
 } = graphql;
 const Folder = new require('../models/folder')();
 const Note = new require('../models/note')();
+const User = new require('../models/user')();
+const UserType = require('./user_type');
+const AuthService = require('../services/auth');
 
 const FolderType = new GraphQLObjectType({
   name: 'Folder',
@@ -180,7 +183,26 @@ const mutation = new GraphQLObjectType({
             return note.save();
           });
       }
-    }
+    },
+
+    signup: {
+      type: UserType,
+      args: {
+        username: {type: GraphQLString},
+        password: {type: GraphQLString}
+      },
+      resolve(parentValue, args, req) {
+        return AuthService.signup(args.username, args.password, req);
+      }
+    },
+
+    // login: {
+    //
+    // },
+    //
+    // logout: {
+    //
+    // },
   }
 });
 
