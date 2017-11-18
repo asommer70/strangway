@@ -60,7 +60,7 @@ module.exports = () => {
 
     findById: (id) => {
       const query = {
-        text: `select *, to_char(updatedat, 'MM-DD-YYYY HH:MI:SS') as updatedat from notes where id = $1;`,
+        text: `select *, to_char(notes.updatedat, 'MM-DD-YYYY HH:MI:SS') as updatedat from notes where id = $1;`,
         values: [id]
       }
       const db = DB.con();
@@ -77,7 +77,7 @@ module.exports = () => {
     findAll: () => {
       const db = DB.con();
 
-      return db.query(`select *, to_char(updatedat, 'MM-DD-YYYY HH:MI:SS') as updatedat from notes order by updatedat desc;`)
+      return db.query(`select *, to_char(notes.updatedat, 'MM-DD-YYYY HH:MI:SS') as updatedat from notes order by notes.updatedat desc;`)
         .then((res) => {
           db.end();
 
