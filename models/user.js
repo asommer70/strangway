@@ -40,38 +40,40 @@ module.exports = () => {
     user: User,
 
     create: (attrs) => {
-      return bcrypt.genSalt(10, (err, salt) => {
-        if (err) { return next(err); }
-        return bcrypt.hash(attrs.password, salt, null, (err, hash) => {
+      return new Promise((resolve, reject) => {
+        bcrypt.genSalt(10, (err, salt) => {
           if (err) { return next(err); }
-          attrs.password = hash;
+          bcrypt.hash(attrs.password, salt, null, (err, hash) => {
+            if (err) { return next(err); }
+            attrs.password = hash;
 
-          const query = {
-            text: `INSERT INTO users (username, email, password, createdAt, updatedAt) values ($1, $2, $3, $4, $5) RETURNING *;`,
-            values: [
-              attrs.username,
-              attrs.email,
-              attrs.password,
-              new Date(),
-              new Date(),
-            ]
-          }
-          const db = DB.con();
+            const query = {
+              text: `INSERT INTO users (username, email, password, createdAt, updatedAt) values ($1, $2, $3, $4, $5) RETURNING *;`,
+              values: [
+                attrs.username,
+                attrs.email,
+                attrs.password,
+                new Date(),
+                new Date(),
+              ]
+            }
+            const db = DB.con();
 
-          return db.query(query)
-            .then((res) => {
-              const user = new User(res.rows[0]);
-              db.end();
-              return user;
-            })
-            .catch(e => console.error(e.stack));
+            return db.query(query)
+              .then((res) => {
+                const user = new User(res.rows[0]);
+                db.end();
+                resolve(user);
+              })
+              .catch(e => console.error(e.stack));
+          });
         });
       });
     },
 
     findById: (id) => {
       const query = {
-        text: `select *, to_char(updatedat, 'MM-DD-YYYY HH:MI:SS') as updatedat from users where id = $1;`,
+        text: `select id, username, email, to_char(updatedat, 'MM-DD-YYYY HH:MI:SS') as updatedat from users where id = $1;`,
         values: [id]
       }
       const db = DB.con();
