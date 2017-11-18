@@ -3,7 +3,7 @@ const should = require('chai').should();
 
 const User = new require('../../models/user')();
 
-describe.only('User', () => {
+describe('User', () => {
   describe('create and delete', () => {
     it('should create a user and delete it', (done) => {
 
@@ -30,6 +30,27 @@ describe.only('User', () => {
       User.findById(adamId)
         .then((user) => {
           assert.equal(user.email, 'taco@thehoick.com');
+          assert.equal(user.password, undefined);
+          user.delete();
+          done();
+        });
+    });
+  });
+
+  describe('findByUsername', () => {
+    let bob = {username: 'bob', email: 'bob@thehoick.com', password: 'slidell'};
+
+    before((done) => {
+      User.create(bob).then((user) => {
+        bob.id = user.id;
+        done();
+      });
+    });
+
+    it('should return a user based on an username', (done) => {
+      User.findByUsername(bob.username)
+        .then((user) => {
+          assert.equal(user.email, 'bob@thehoick.com');
           assert.equal(user.password, undefined);
           user.delete();
           done();
