@@ -97,6 +97,13 @@ const RootQuery = new GraphQLObjectType({
           });
       }
     },
+
+    user: {
+      type: UserType,
+      resolve(parentValue, args, req) {
+        return req.user;
+      }
+    }
   }
 });
 
@@ -196,13 +203,25 @@ const mutation = new GraphQLObjectType({
       }
     },
 
-    // login: {
-    //
-    // },
-    //
-    // logout: {
-    //
-    // },
+    login: {
+      type: UserType,
+      args: {
+        username: {type: GraphQLString},
+        password: {type: GraphQLString}
+      },
+      resolve(parentValue, args, req) {
+        return AuthService.login(args.username, args.password, req);
+      }
+    },
+
+    logout: {
+      type: UserType,
+      resolve(parentValue, args, req) {
+        const {user} = req;
+        req.logout();
+        return user;
+      }
+    },
   }
 });
 

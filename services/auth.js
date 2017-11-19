@@ -17,8 +17,8 @@ passport.use(new LocalStrategy({ usernameField: 'username' }, (username, passwor
   return User.findByUsername(username)
     .then((user) => {
       user.comparePassword(password)
-        .then((err, isMatch) => {
-          if (isMatch) {
+        .then((result) => {
+          if (result.isMatch) {
             return done(null, user);
           }
           return done(null, false, 'Invalid credentials.');
@@ -55,7 +55,7 @@ function signup(username, password, req) {
     })
 }
 
-function login({ username, password, req }) {
+function login(username, password, req) {
   return new Promise((resolve, reject) => {
     passport.authenticate('local', (err, user) => {
       if (!user) { reject('Invalid credentials.') }

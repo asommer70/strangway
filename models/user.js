@@ -37,7 +37,7 @@ var User = function(attrs) {
   this.comparePassword = (password) => {
     return new Promise((resolve, reject) => {
       bcrypt.compare(password, this.password, (err, isMatch) => {
-        resolve(err, isMatch);
+        resolve({error: err, isMatch});
       });
     });
   }
@@ -97,7 +97,7 @@ module.exports = () => {
 
     findByUsername: (username) => {
       const query = {
-        text: `select id, username, email, to_char(updatedat, 'MM-DD-YYYY HH:MI:SS') as updatedat from users where username = $1;`,
+        text: `select *, to_char(updatedat, 'MM-DD-YYYY HH:MI:SS') as updatedat from users where username = $1;`,
         values: [username]
       }
       const db = DB.con();
