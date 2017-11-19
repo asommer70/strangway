@@ -1,6 +1,7 @@
 const graphql = require('graphql');
 const {
   GraphQLObjectType,
+  GraphQLID,
   GraphQLString,
   GraphQLInt,
   GraphQLList,
@@ -16,7 +17,7 @@ const AuthService = require('../services/auth');
 const FolderType = new GraphQLObjectType({
   name: 'Folder',
   fields: () => ({
-    id: { type: GraphQLInt },
+    id: { type: GraphQLID },
     name: { type: GraphQLString },
     createdAt: { type: GraphQLString },
     updatedAt: { type: GraphQLString },
@@ -35,7 +36,7 @@ const FolderType = new GraphQLObjectType({
 const NoteType = new GraphQLObjectType({
   name: 'Note',
   fields: {
-    id: { type: GraphQLInt },
+    id: { type: GraphQLID },
     name: { type: GraphQLString },
     content: { type: GraphQLString },
     folderId: { type: GraphQLInt },
