@@ -1,7 +1,7 @@
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 
-const User = require('../models/user');
+const User = new require('../models/user')();
 
 passport.serializeUser((user, done) => {
   done(null, user.id);
@@ -14,7 +14,7 @@ passport.deserializeUser((id, done) => {
 });
 
 passport.use(new LocalStrategy({ usernameField: 'username' }, (username, password, done) => {
-  User.findByUsername(username)
+  return User.findByUsername(username)
     .then((user) => {
       user.comparePassword(password)
         .then((err, isMatch) => {
@@ -26,23 +26,33 @@ passport.use(new LocalStrategy({ usernameField: 'username' }, (username, passwor
     });
 }));
 
-function signup({ username, password, req }) {
-  const user = {username, password};
+function signup(username, password, req) {
   if (!username || !password) { throw new Error('You must provide an username and password.'); }
+  const user = {username, password};
 
   return User.findByUsername(username)
     .then((existingUser) => {
-      if (existingUser) { throw new Error('Username in use'); }
+      if (existingUser) {
+        throw new Error('Username in use');
+      } else {
+        return User.create({username, password})
+          .then((user) => {
+            return user;
+          });
+      }
       return;
     })
-    .then(() => {
+    .then((user) => {
       return new Promise((resolve, reject) => {
         req.logIn(user, (err) => {
           if (err) { reject(err); }
           resolve(user);
         });
       });
-    });
+    })
+    .catch((err) => {
+      console.log('signup User.findByUsername err:', err);
+    })
 }
 
 function login({ username, password, req }) {

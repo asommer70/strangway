@@ -88,9 +88,9 @@ module.exports = () => {
 
       return db.query(query)
         .then((res) => {
-          const note = new User(res.rows[0]);
+          const user = new User(res.rows[0]);
           db.end();
-          return note;
+          return user;
         })
         .catch(e => console.error(e.stack));
     },
@@ -104,9 +104,9 @@ module.exports = () => {
 
       return db.query(query)
         .then((res) => {
-          const note = new User(res.rows[0]);
+          const user = new User(res.rows[0]);
           db.end();
-          return note;
+          return user;
         })
         .catch(e => console.error(e.stack));
     },
