@@ -41,6 +41,12 @@ var User = function(attrs) {
       });
     });
   }
+
+  this.comparePasswordCallback = (password, callback) => {
+    bcrypt.compare(password, this.password, (err, isMatch) => {
+      callback(err, isMatch);
+    });
+  }
 }
 
 module.exports = () => {
@@ -109,6 +115,25 @@ module.exports = () => {
           return user;
         })
         .catch(e => console.error(e.stack));
+    },
+
+    findByUsernameCallback: (username, callback) => {
+      const query = {
+        text: `select *, to_char(updatedat, 'MM-DD-YYYY HH:MI:SS') as updatedat from users where username = $1;`,
+        values: [username]
+      }
+      const db = DB.con();
+
+      db.query(query, (err, res) => {
+        db.end();
+        if (err) {
+          callback(err, null);
+        } else {
+          const user = new User(res.rows[0]);
+          // db.end();
+          callback(null, user);
+        }
+      });
     },
   }
 }

@@ -8,22 +8,29 @@ passport.serializeUser((user, done) => {
 });
 
 passport.deserializeUser((id, done) => {
-  User.findById(id, (err, user) => {
-    done(err, user);
-  });
+  User.findById(id)
+    .then((user) => {
+      done(null, user);
+    })
+    .catch((err) => {
+      done(err, null);
+    });
 });
 
-passport.use(new LocalStrategy({ usernameField: 'username' }, (username, password, done) => {
-  return User.findByUsername(username)
-    .then((user) => {
-      user.comparePassword(password)
-        .then((result) => {
-          if (result.isMatch) {
-            return done(null, user);
-          }
-          return done(null, false, 'Invalid credentials.');
-        });
+passport.use(new LocalStrategy((username, password, done) => {
+  User.findByUsernameCallback(username, (err, user) => {
+    if (err) { return done(err) }
+    if (!user) { return done(null, false, 'Invalid Credentials'); }
+
+    user.comparePasswordCallback(password, (err, isMatch) => {
+      if (err) { return done(err); }
+      if (isMatch) {
+        return done(null, user);
+      } else {
+        return done(null, false, 'Invalid credentials.');
+      }
     });
+  });
 }));
 
 function signup(username, password, req) {
@@ -40,7 +47,7 @@ function signup(username, password, req) {
             return user;
           });
       }
-      return;
+      return existingUser;
     })
     .then((user) => {
       return new Promise((resolve, reject) => {
@@ -60,7 +67,9 @@ function login(username, password, req) {
     passport.authenticate('local', (err, user) => {
       if (!user) { reject('Invalid credentials.') }
 
-      req.login(user, () => resolve(user));
+      req.login(user, (err) => {
+        resolve(user);
+      });
     })({ body: { username, password } });
   });
 }

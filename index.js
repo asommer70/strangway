@@ -4,7 +4,6 @@ const cors = require('cors');
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const passport = require('passport');
-// const LocalStrategy = require('passport-local').Strategy;
 const FileStore = require('session-file-store')(session);
 const passportConfig = require('./services/auth');
 
@@ -22,6 +21,10 @@ app.use('/graphql', expressGraphQL({
   schema,
   graphiql: true
 }));
+
+app.get('/', function (req, res) {
+  res.json({message: 'Hello, welcome to Strangway...'});
+})
 
 app.listen(process.env.PORT, () => {
   console.log(`Listening on port ${process.env.PORT}...`);
