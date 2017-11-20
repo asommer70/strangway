@@ -12,7 +12,7 @@ const schema = require('./schema');
 
 const app = express();
 
-app.use(cors());
+app.use(cors({origin: 'http://localhost:3000', credentials: true}));
 app.use(cookieParser());
 app.use(session({ secret: 'notes rule', cookie: {}, resave: true, saveUninitialized: true, store: new FileStore }));
 app.use(passport.initialize());
