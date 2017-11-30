@@ -60,7 +60,9 @@ const RootQuery = new GraphQLObjectType({
     folder: {
       type: FolderType,
       args: { id: { type: GraphQLInt } },
-      resolve(parentValue, args) {
+      resolve(parentValue, args, req) {
+        if (!req.user) return null;
+
         return Folder.findById(args.id)
           .then((folder) => {
             return folder;
@@ -70,7 +72,9 @@ const RootQuery = new GraphQLObjectType({
 
     folders: {
       type: new GraphQLList(FolderType),
-      resolve(parentValue, args) {
+      resolve(parentValue, args, req) {
+        if (!req.user) return null;
+
         return Folder.findAll()
           .then((folders) => {
             return folders;
@@ -81,7 +85,9 @@ const RootQuery = new GraphQLObjectType({
     note: {
       type: NoteType,
       args: { id: { type: GraphQLInt } },
-      resolve(parentValue, args) {
+      resolve(parentValue, args, req) {
+        if (!req.user) return null;
+
         return Note.findById(args.id)
           .then((note) => {
             return note;
@@ -91,7 +97,9 @@ const RootQuery = new GraphQLObjectType({
 
     notes: {
       type: new GraphQLList(NoteType),
-      resolve(parentValue, args) {
+      resolve(parentValue, args, req) {
+        if (!req.user) return null;
+
         return Note.findAll()
           .then((notes) => {
             return notes;
@@ -116,7 +124,9 @@ const mutation = new GraphQLObjectType({
       args: {
         name: { type: new GraphQLNonNull(GraphQLString) },
       },
-      resolve(parentValue, args) {
+      resolve(parentValue, args, req) {
+        if (!req.user) return null;
+
         return Folder.create(args.name)
       }
     },
