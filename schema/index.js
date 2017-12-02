@@ -61,6 +61,7 @@ const RootQuery = new GraphQLObjectType({
       type: FolderType,
       args: { id: { type: GraphQLInt } },
       resolve(parentValue, args, req) {
+        // console.log('Schemea folder args:', args, 'req.user:', req.user);
         if (!req.user) return null;
 
         return Folder.findById(args.id)
@@ -73,6 +74,7 @@ const RootQuery = new GraphQLObjectType({
     folders: {
       type: new GraphQLList(FolderType),
       resolve(parentValue, args, req) {
+        // console.log('Schemea folders req.user:', req.user);
         if (!req.user) return null;
 
         return Folder.findAll()
@@ -136,7 +138,9 @@ const mutation = new GraphQLObjectType({
       args: {
         id: { type: new GraphQLNonNull(GraphQLInt) }
       },
-      resolve(parentValue, args) {
+      resolve(parentValue, args, req) {
+        if (!req.user) return null;
+
         return Folder.findById(args.id)
           .then((folder) => {
             return folder.delete();
@@ -150,7 +154,9 @@ const mutation = new GraphQLObjectType({
         id: { type: new GraphQLNonNull(GraphQLInt) },
         name: { type: new GraphQLNonNull(GraphQLString) }
       },
-      resolve(parentValue, args) {
+      resolve(parentValue, args, req) {
+        if (!req.user) return null;
+
         return Folder.findById(args.id)
           .then((folder) => {
             folder.name = args.name;
@@ -166,7 +172,9 @@ const mutation = new GraphQLObjectType({
         content: { type: GraphQLString },
         folderId: { type: GraphQLInt }
       },
-      resolve(parentValue, args) {
+      resolve(parentValue, args, req) {
+        if (!req.user) return null;
+
         return Note.create({name: args.name, content: args.content, folderId: args.folderId})
       }
     },
@@ -176,7 +184,9 @@ const mutation = new GraphQLObjectType({
       args: {
         id: { type: new GraphQLNonNull(GraphQLInt) }
       },
-      resolve(parentValue, args) {
+      resolve(parentValue, args, req) {
+        if (!req.user) return null;
+
         return Note.findById(args.id)
           .then((note) => {
             return note.delete();
@@ -192,7 +202,9 @@ const mutation = new GraphQLObjectType({
         content: { type: GraphQLString },
         folderId: { type: GraphQLInt }
       },
-      resolve(parentValue, args) {
+      resolve(parentValue, args, req) {
+        if (!req.user) return null;
+
         return Note.findById(args.id)
           .then((note) => {
             note.name = (args.name != null) ? args.name : note.name;
