@@ -95,7 +95,7 @@ module.exports = () => {
     findAll: () => {
       const db = DB.con();
 
-      return db.query(`select * from folders;`)
+      return db.query(`select * from folders order by createdat;`)
         .then((res) => {
           db.end();
 
