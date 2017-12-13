@@ -1,0 +1,28 @@
+PUT /notes
+
+{
+  "settings": {
+    "number_of_shards": 2,
+    "number_of_replicas": 1
+  },
+  "mappings": {
+    "default": {
+      "properties": {
+        "id": { "type": "integer" },
+        "name": { "type": "text", "analyzer": "english" },
+        "content": { "type": "text", "analyzer": "english" },
+        "folderId": { "type": "integer" },
+        "createdAt": { 
+          "type": "date",
+          "format": "MM-dd-yyy HH:mm:ss"
+        },
+        "updatedAt": { 
+          "type": "date",
+          "format": "MM-dd-yyy HH:mm:ss"
+        }
+      }
+    }
+  }
+}
+
+PUT /notes/default/$ID
