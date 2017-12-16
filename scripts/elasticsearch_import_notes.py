@@ -43,3 +43,5 @@ for folder in folders['data']['folders']:
 
     for note in notes['data']['folder']['notes']:
         print("\tid:", note['name'])
+
+        req = requests.put('http://' + os.environ.get('ELASTISEARCH') + ':9200/notes/default/' + note['id'], json=note)
