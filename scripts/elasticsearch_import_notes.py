@@ -42,6 +42,7 @@ for folder in folders['data']['folders']:
     notes = json.loads(req.text)
 
     for note in notes['data']['folder']['notes']:
-        print("\tid:", note['name'])
+        print("\t", note['name'])
 
-        req = requests.put('http://' + os.environ.get('ELASTISEARCH') + ':9200/notes/default/' + note['id'], json=note)
+        elasticurl = 'http://' + os.environ.get('ELASTICSEARCH') + ':9200/notes/default/' + str(note['id'])
+        req = requests.put(elasticurl, json=note)
