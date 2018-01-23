@@ -31,10 +31,16 @@ var Folder = function(attrs) {
         .catch(e => console.error(e.stack));
     }
 
-    this.notes = () => {
+    this.notes = (offset) => {
       const db = DB.con();
+      console.log('offset:', offset);
       const query = {
-        text: `select *, to_char(notes.updatedat, 'MM-DD-YYYY HH:MI:SS') as updatedat, to_char(notes.createdat, 'MM-DD-YYYY HH:MI:SS') as createdat from notes where folderId = $1 order by notes.updatedat desc;`,
+        text: `select *,
+                      to_char(notes.updatedat, 'MM-DD-YYYY HH:MI:SS') as updatedat,
+                      to_char(notes.createdat, 'MM-DD-YYYY HH:MI:SS') as createdat
+                from notes
+                where folderId = $1
+                order by notes.updatedat desc limit 10 offset ${offset};`,
         values: [this.id]
       }
 

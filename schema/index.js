@@ -23,8 +23,9 @@ const FolderType = new GraphQLObjectType({
     updatedAt: { type: GraphQLString },
     notes: {
       type: new GraphQLList(NoteType),
+      args: { offset: { type: GraphQLInt } },
       resolve(parentValue, args) {
-        return parentValue.notes()
+        return parentValue.notes(args.offset)
           .then((notes) => {
             return notes;
           });
@@ -59,7 +60,7 @@ const RootQuery = new GraphQLObjectType({
   fields: {
     folder: {
       type: FolderType,
-      args: { id: { type: GraphQLInt } },
+      args: { id: { type: GraphQLInt }, offset: { type: GraphQLInt } },
       resolve(parentValue, args, req) {
         // console.log('Schemea folder args:', args, 'req.user:', req.user);
         if (!req.user) return null;
@@ -99,6 +100,7 @@ const RootQuery = new GraphQLObjectType({
 
     notes: {
       type: new GraphQLList(NoteType),
+      args: { offset: { type: GraphQLInt } },
       resolve(parentValue, args, req) {
         if (!req.user) return null;
 
