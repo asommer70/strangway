@@ -2,17 +2,12 @@
 *.swp
 *.swo
 
-.idea/
+venv/
+
 .env
 
-dist/
 node_modules/
-package-lock.json
-
 npm-debug.log
 
 config.json
-strangway
-sessions/
 
-scripts/strangway
