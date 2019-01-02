@@ -3,11 +3,13 @@
 *.swo
 
 venv/
+vendor
 
 .env
 
 node_modules/
 npm-debug.log
+__pycache__/
+*.pyc
 
 config.json
-

@@ -14,8 +14,21 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+# from django.contrib.auth import views as auth_views
+from django.contrib.auth.views import LoginView
+from django.conf import settings
+from django.conf.urls.static import static
+from django.urls import include, path
+from . import views
 
 urlpatterns = [
+    path('notes/', include('notes.urls', namespace='notes')),
+    # path('login/', auth_views.login, name='login'),
+    path('login', LoginView.as_view()),
+    path('logout', views.logout_view),
+    path('', views.IndexView.as_view()),
     path('admin/', admin.site.urls),
-]
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+handler404 = 'views.note_not_found'
