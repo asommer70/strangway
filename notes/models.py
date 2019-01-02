@@ -6,13 +6,13 @@ class Note(models.Model):
     content = models.TextField(null=True, blank=True, default="")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    folder = models.ForeignKey('folder')
+    folder = models.ForeignKey('Folder', models.CASCADE, null=True)
 
     class Meta:
         ordering = ['-updated_at']
 
     def __str__(self):
-        return self.name
+        return 'Name: ' + self.name + ' Folder: ' + self.folder.name
 
 
 class Folder(models.Model):
