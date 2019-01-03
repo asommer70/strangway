@@ -6,6 +6,10 @@
     <h1>Notes</h1>
     <br/>
 
+    <div id="app">
+      <h3>${message}</h3>
+    </div>
+
     <div class="notes">
       {% for note in notes %}
         {{notes.name}}
@@ -29,4 +33,18 @@
   <script type="text/javascript">
     var token = "{{user.auth_token.key}}";
   </script>
+
+{% endblock %}
+
+{% block vue %}
+
+<script type="text/javascript">
+  var app2 = new Vue({
+    el: '#app',
+    delimiters: ['${', '}'],
+    data: {
+      message: 'You loaded this page on ' + new Date().toLocaleString()
+    }
+  });
+</script>
 {% endblock %}
