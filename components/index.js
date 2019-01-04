@@ -26,6 +26,9 @@ if (!fs.existsSync(cssAssets)){
 fs.createReadStream('./node_modules/foundation-sites/dist/js/foundation.min.js')
   .pipe(fs.createWriteStream(assets + '/js/vendor/foundation.min.js'));
 
+fs.createReadStream('./node_modules/foundation-sites/dist/js/foundation.min.js.map')
+  .pipe(fs.createWriteStream(assets + '/js/vendor/foundation.min.js.map'));
+
 fs.createReadStream('./node_modules/jquery/dist/jquery.min.js')
   .pipe(fs.createWriteStream(assets + '/js/vendor/jquery.min.js'));
 

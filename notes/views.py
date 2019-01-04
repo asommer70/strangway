@@ -15,6 +15,23 @@ class NoteListView(LoginRequiredMixin, ListView):
     model = Note
     paginate_by = 10
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        context['folders'] = Folder.objects.all()
+        return context
+
+
+class FolderNotesView(LoginRequiredMixin, DetailView):
+    model = Folder
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        context['folders'] = Folder.objects.all()
+        return context
+
+
 
 class ListCreateNote(generics.ListCreateAPIView):
     queryset = Note.objects.all()

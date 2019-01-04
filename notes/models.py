@@ -16,6 +16,7 @@ class Note(models.Model):
 
 
 class Folder(models.Model):
-    name = models.TextField(max_length=1024, blank=True, null=True, default="")
+    name = models.TextField(max_length=1024, default="New Note")
+    slug = models.SlugField(max_length=1024, default="Main", unique=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
