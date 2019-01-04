@@ -20,3 +20,6 @@ class Folder(models.Model):
     slug = models.SlugField(max_length=1024, default="Main", unique=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return 'Name: ' + self.name + ' slug: ' + self.slug

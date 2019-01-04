@@ -10,7 +10,7 @@
 
         <ul class="folders no-bullet">
           {% for folder in folders %}
-            <li>
+            <li class="{% if request.path == '/'|add:folder.slug|add:'/' %}active-folder{% endif %}">
               <a href="{% url 'notes:folder' slug=folder.slug %}">{{folder.name}}</a>
             </li>
           {% endfor %}
@@ -18,10 +18,14 @@
 
         <button class="button tiny hider" data-hider="new-folder">New Folder</button>
 
-      <div class="callout hide" id="new-folder">
+      <div class="callout hide popup-form" id="new-folder">
         <!-- <button class="close-button" data-close>&times;</button> -->
-        <h4>Hello!</h4>
-        <p>Tacos</p>
+        <h5>New Folder</h5>
+        <form class="" action="#" method="post">
+          {% csrf_token %}
+          {{ form.as_p }}
+          <input type="submit" value="Create Folder" class="button tiny success" />
+        </form>
       </div>
 
       </div>

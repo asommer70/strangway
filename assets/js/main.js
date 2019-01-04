@@ -7,4 +7,12 @@ $(document).ready(function() {
     $this = $(this);
     $('#' + $this.data().hider).toggleClass('hide');
   });
+
+  $('.dbl-hider').contextmenu(function() {
+    // e.preventDefault();
+
+    $this = $(this);
+    $('#' + $this.data().hider).toggleClass('hide');
+
+  });
 });

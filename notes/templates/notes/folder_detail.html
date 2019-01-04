@@ -9,11 +9,34 @@
 
     <ul class="folders no-bullet">
       {% for folder in folders %}
-        <li>
-          <a href="{% url 'notes:folder' slug=folder.slug %}">{{folder.name}}</a>
+
+
+        <li class="{% if request.path == '/notes/folder/'|add:folder.slug %}active-folder{% endif %}">
+          <a href="{% url 'notes:folder' slug=folder.slug %}" class="dbl-hider" data-hider="{{folder.slug}}-edit">{{folder.name}}</a>
+
+          <div class="folder-edit hide" id="{{folder.slug}}-edit">
+            <form class="" action="{% url 'notes:folder' slug=folder.slug %}" method="post">
+              {% csrf_token %}
+              {{ folder_form.as_p }}
+              <input type="submit" value="Save" class="button tiny success" />
+            </form>
+          </div>
         </li>
       {% endfor %}
     </ul>
+
+    <hr/>
+    <button class="button tiny hider" data-hider="new-folder">New Folder</button>
+
+    <div class="callout hide popup-form" id="new-folder">
+      <!-- <button class="close-button" data-close>&times;</button> -->
+      <h5>New Folder</h5>
+      <form class="" action="#" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Create Folder" class="button tiny success" />
+      </form>
+    </div>
 
   </div>
 
