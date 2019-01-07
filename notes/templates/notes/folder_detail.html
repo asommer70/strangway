@@ -12,30 +12,29 @@
 
 
         <li class="{% if request.path == '/notes/folder/'|add:folder.slug %}active-folder{% endif %}">
-          <a href="{% url 'notes:folder' slug=folder.slug %}" class="dbl-hider" data-hider="{{folder.slug}}-edit">{{folder.name}}</a>
-
-          <div class="folder-edit hide" id="{{folder.slug}}-edit">
-            <form class="" action="{% url 'notes:folder' slug=folder.slug %}" method="post">
-              {% csrf_token %}
-              {{ folder_form.as_p }}
-              <input type="submit" value="Save" class="button tiny success" />
-            </form>
-          </div>
+          <a href="{% url 'notes:folder' slug=folder.slug %}">{{folder.name}}</a>
         </li>
       {% endfor %}
     </ul>
 
     <hr/>
-    <button class="button tiny hider" data-hider="new-folder">New Folder</button>
+    <button class="button tiny hider" data-hider="edit-folder">Edit Folder</button>
 
-    <div class="callout hide popup-form" id="new-folder">
+    <div class="callout hide popup-form" id="edit-folder">
       <!-- <button class="close-button" data-close>&times;</button> -->
-      <h5>New Folder</h5>
       <form class="" action="#" method="post">
+        {% csrf_token %}
+        {{ folder_form.as_p }}
+        <input type="submit" value="Save" class="button tiny success" />
+
+        <a class="button tiny alert float-right" href="{% url 'notes:delete_folder' slug=folder.slug %}">&times;</a>
+      </form>
+
+      <!-- <form class="" action="#" method="post">
         {% csrf_token %}
         {{ form.as_p }}
         <input type="submit" value="Create Folder" class="button tiny success" />
-      </form>
+      </form> -->
     </div>
 
   </div>

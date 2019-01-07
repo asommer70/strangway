@@ -1,0 +1,17 @@
+{% extends 'layout.html' %}
+
+{% block title %}Delete {{folder.name}}{% endblock %}
+
+{% block body %}
+
+<h2>Really Delete {{folder.name}}?<h2>
+
+
+<form method="post">
+  {% csrf_token %}
+  <input type="submit" value="Delete" class="button alert">
+  &nbsp;&nbsp;
+  <a href="{% url 'notes:folder' slug=folder.slug %}">Cancel</a>
+</form>
+
+{% endblock %}

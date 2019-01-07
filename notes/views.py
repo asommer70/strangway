@@ -1,4 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.messages.views import SuccessMessageMixin
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from django.template.defaultfilters import slugify
@@ -49,6 +50,20 @@ class FolderNotesView(LoginRequiredMixin, DetailView, FormView):
             print('form.cleand_data:', form.cleaned_data)
             Folder.objects.create(name=form.cleaned_data['name'], slug=slugify(form.cleaned_data['name']))
         return super().form_valid(form)
+
+    def post(self, request, *args, **kwargs):
+        folder = Folder.objects.get(slug=kwargs['slug'])
+        folder.name = request.POST['name']
+        folder.slug = slugify(folder.name)
+        folder.save()
+        return HttpResponseRedirect('/notes/folder/' + folder.slug)
+
+
+class FolderDeleteView(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
+    model = Folder
+    success_url = reverse_lazy('notes:list')
+    success_message = "Folder deleted."
+
 
 class ListCreateNote(generics.ListCreateAPIView):
     queryset = Note.objects.all()
