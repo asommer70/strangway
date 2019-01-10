@@ -12,7 +12,10 @@ class Note(models.Model):
         ordering = ['-updated_at']
 
     def __str__(self):
-        return 'Name: ' + self.name + ' Folder: ' + self.folder.name
+        if self.folder:
+            return 'Name: ' + self.name + ' Folder: ' + self.folder.name
+        else:
+            return 'Name: ' + self.name
 
 
 class Folder(models.Model):
@@ -22,4 +25,4 @@ class Folder(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return 'Name: ' + self.name + ' slug: ' + self.slug
+        return self.name

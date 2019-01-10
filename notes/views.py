@@ -11,7 +11,7 @@ from rest_framework.authentication import TokenAuthentication
 
 from .models import Note, Folder
 from .serializers import NoteSerializer
-from .forms import NewFolderForm, FolderForm
+from .forms import NewFolderForm, FolderForm, NewNoteForm
 
 
 class NoteListView(LoginRequiredMixin, ListView, FormView):
@@ -32,6 +32,21 @@ class NoteListView(LoginRequiredMixin, ListView, FormView):
             Folder.objects.create(name=form.cleaned_data['name'], slug=slugify(form.cleaned_data['name']))
         return super().form_valid(form)
 
+
+class NoteCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
+    model = Note
+    form_class = NewNoteForm
+    success_url = reverse_lazy('notes:list')
+    success_message = "Note created."
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            note = form.save()
+            return HttpResponseRedirect('/notes/folder/' + note.folder.slug)
+
+        return render(request, self.template_name, {'form': form})
+
 class FolderNotesView(LoginRequiredMixin, DetailView, FormView):
     model = Folder
     form_class = FolderForm
@@ -41,8 +56,10 @@ class FolderNotesView(LoginRequiredMixin, DetailView, FormView):
         context = super().get_context_data(**kwargs)
         active_folder = Folder.objects.get(slug=self.request.path.split('/')[-1])
 
+        context['active_folder'] = active_folder
         context['folders'] = Folder.objects.all()
         context['folder_form'] = FolderForm(initial={'name': active_folder.name})
+        context['note_form'] = NewNoteForm()
         return context
 
     def form_valid(self, form):

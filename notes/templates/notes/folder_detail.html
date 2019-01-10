@@ -1,6 +1,6 @@
 {% extends 'layout.html' %}
 
-{% block title %}{{folder.name}}{% endblock %}
+{% block title %}{{active_folder.name}}{% endblock %}
 
 {% block body %}
 <div class="row">
@@ -9,7 +9,6 @@
 
     <ul class="folders no-bullet">
       {% for folder in folders %}
-
 
         <li class="{% if request.path == '/notes/folder/'|add:folder.slug %}active-folder{% endif %}">
           <a href="{% url 'notes:folder' slug=folder.slug %}">{{folder.name}}</a>
@@ -21,7 +20,6 @@
     <button class="button tiny hider" data-hider="edit-folder">Edit Folder</button>
 
     <div class="callout hide popup-form" id="edit-folder">
-      <!-- <button class="close-button" data-close>&times;</button> -->
       <form class="" action="#" method="post">
         {% csrf_token %}
         {{ folder_form.as_p }}
@@ -29,12 +27,6 @@
 
         <a class="button tiny alert float-right" href="{% url 'notes:delete_folder' slug=folder.slug %}">&times;</a>
       </form>
-
-      <!-- <form class="" action="#" method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <input type="submit" value="Create Folder" class="button tiny success" />
-      </form> -->
     </div>
 
   </div>
@@ -42,11 +34,11 @@
   <div class="columns large-2">
     <h4>Notes</h4>
 
+    <a class="button tiny" href="{% url 'notes:create' %}">New Note</a>
+
     <div class="notes">
-      {% for note in notes %}
-        {{note.name}}
-        <br>
-        {{note.content}}
+      {% for note in active_folder.note_set.all %}
+        {{note.name}} <br/><br/>
       {% endfor %}
     </div>
   </div>
