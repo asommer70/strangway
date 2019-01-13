@@ -3,7 +3,7 @@
 {% block title %}{{active_folder.name}}{% endblock %}
 
 {% block body %}
-<div class="row">
+<div id="app" class="row">
   <div class="columns large-1">
     <h4>Folders</h4>
 
@@ -36,16 +36,18 @@
 
     <a class="button tiny" href="{% url 'notes:create' %}">New Note</a>
 
-    <div class="notes">
+    <ul class="notes no-bullet">
       {% for note in active_folder.note_set.all %}
-        {{note.name}} <br/><br/>
+        <li class="note-name">{{note.name}}</li>
       {% endfor %}
-    </div>
+    </ul>
   </div>
 
   <div class="columns large-7">
     <br><br>
-    Note content...
+    <div id="note">
+      <p>${message}</p>
+    </div>
   </div>
 </div>
 
@@ -53,5 +55,28 @@
 
 
 {% block vue %}
-
+<script type="text/javascript">
+  var app = new Vue({
+    el: '#app',
+    delimiters: ['${', '}'],
+    data: {
+      message: 'You loaded this page on ' + new Date().toLocaleString()
+    },
+    computed: {
+      notes: function() {
+        return [
+          {% for note in active_folder.note_set.all %}
+            {
+              id: {{note.id}},
+              name: '{{note.name}}',
+              content: '{{note.conent}}',
+              created_at: '{{note.created_at}}',
+              updated_at: '{{note.updated_at}}'
+            },
+          {% endfor %}
+        ];
+      },
+    }
+  });
+</script>
 {% endblock %}
