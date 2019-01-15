@@ -37,17 +37,26 @@
     <a class="button tiny" href="{% url 'notes:create' %}">New Note</a>
 
     <ul class="notes no-bullet">
-      {% for note in active_folder.note_set.all %}
-        <li class="note-name">{{note.name}}</li>
-      {% endfor %}
+        <li class="note-name" v-for="note in notes" @click="setNote(note)">
+          ${note.name}
+        </li>
     </ul>
   </div>
 
-  <div class="columns large-7">
+  <div class="columns large-6">
     <br><br>
     <div id="note">
+      <div class="note-content">
+        ${note.name}
+        <br/>
+        ${note.content}
+      </div>
       <p>${message}</p>
     </div>
+  </div>
+
+  <div class="columns large-1">
+    <a :href="`/notes/${note.id}/edit`" class="button tiny warning">Edit ${note.name}</a>
   </div>
 </div>
 
@@ -60,8 +69,10 @@
     el: '#app',
     delimiters: ['${', '}'],
     data: {
-      message: 'You loaded this page on ' + new Date().toLocaleString()
+      message: 'You loaded this page on ' + new Date().toLocaleString(),
+      note: {}
     },
+
     computed: {
       notes: function() {
         return [
@@ -76,6 +87,13 @@
           {% endfor %}
         ];
       },
+    },
+
+    methods: {
+      setNote: function(note) {
+        this.note = note;
+        console.log('this.note:', this.note);
+      }
     }
   });
 </script>

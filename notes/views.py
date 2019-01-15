@@ -47,6 +47,21 @@ class NoteCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
 
         return render(request, self.template_name, {'form': form})
 
+
+
+class NoteUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+    fields = ['name', 'content', 'folder']
+    model = Note
+    success_message = "Note updated."
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            note = form.save()
+            return HttpResponseRedirect('/notes/folder/' + note.folder.slug)
+
+        return render(request, self.template_name, {'form': form})
+
 class FolderNotesView(LoginRequiredMixin, DetailView, FormView):
     model = Folder
     form_class = FolderForm

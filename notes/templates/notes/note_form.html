@@ -1,12 +1,12 @@
 {% extends 'layout.html' %}
 
-{% block title %}New Note{% endblock %}
+{% block title %}{% if form.instance.pk %}Edit Note{% else %}New Note{% endif %}{% endblock %}
 
 {% block body %}
 
 <div class="row">
   <div class="columns large-5">
-    <h1>New Note</h1>
+    <h1>{% if form.instance.pk %}Edit {{form.instance.name}}{% else %}New Note{% endif %}</h1>
 
     <form class=""  method="post">
       {% csrf_token %}

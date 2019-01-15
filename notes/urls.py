@@ -7,7 +7,7 @@ urlpatterns = [
     path('folder/<slug:slug>', views.FolderNotesView.as_view(), name='folder'),
      path('folder/<slug:slug>/delete', views.FolderDeleteView.as_view(), name='delete_folder'),
     path('create', views.NoteCreateView.as_view(), name='create'),
-    # path('<int:pk>/edit', views.PhotoUpdateView.as_view(), name='update'),
+    path('<int:pk>/edit', views.NoteUpdateView.as_view(), name='update'),
     # path('<int:pk>/delete', views.PhotoDeleteView.as_view(), name='delete'),
 
     path('api', views.ListCreateNote.as_view(), name="notes"),
