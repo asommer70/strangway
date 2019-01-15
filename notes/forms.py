@@ -16,7 +16,7 @@ class FolderForm(forms.ModelForm):
         fields = ['name']
 
 
-class NewNoteForm(forms.ModelForm):
+class NoteForm(forms.ModelForm):
     name = forms.CharField(widget=forms.TextInput)
     content = forms.CharField(widget=forms.Textarea)
 

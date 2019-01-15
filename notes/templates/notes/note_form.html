@@ -14,6 +14,7 @@
 
       <input type="hidden" name="referer" value="{{request.META.HTTP_REFERER}}">
       <input type="submit" value="Save" class="button  success" />
+      {% if form.instance.pk %} <a href="{% url 'notes:folder' slug=form.instance.folder.slug %}" class="button small secondary float-right">Cancel</a>{% endif %}
     </form>
   </div>
 </div>
