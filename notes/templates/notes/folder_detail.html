@@ -48,15 +48,22 @@
     <div id="note">
       <div class="note-content">
         ${note.name}
+
+        <div v-if="note.id">
+          <hr/>
+        </div>
         <br/>
-        ${note.content}
+
+        <div v-if="note.id" v-html="note.content">
+        </div>
       </div>
+
       <p>${message}</p>
     </div>
   </div>
 
   <div class="columns large-1">
-    <a :href="`/notes/${note.id}/edit`" class="button tiny warning">Edit ${note.name}</a>
+    <a v-if="note.id" :href="`/notes/${note.id}/edit`" class="button tiny warning">Edit</a>
   </div>
 </div>
 
@@ -65,6 +72,7 @@
 
 {% block vue %}
 <script type="text/javascript">
+  // Vue.use(VueSimpleMarkdown);
   var app = new Vue({
     el: '#app',
     delimiters: ['${', '}'],
@@ -80,7 +88,7 @@
             {
               id: {{note.id}},
               name: '{{note.name}}',
-              content: '{{note.conent}}',
+              content: `{{note.content}}`,
               created_at: '{{note.created_at}}',
               updated_at: '{{note.updated_at}}'
             },
@@ -93,6 +101,8 @@
       setNote: function(note) {
         this.note = note;
         console.log('this.note:', this.note);
+        console.log('this.child:', this.child);
+        this.note.content = markdown.toHTML(this.note.content);
       }
     }
   });
